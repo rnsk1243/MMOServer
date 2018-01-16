@@ -1,0 +1,17 @@
+﻿  ReadyServer.cpp
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.h(14): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.h(14): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.h(14): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(59): error C2059: 구문 오류: ','
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(60): error C2065: 'workerThread': 선언되지 않은 식별자입니다.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(60): error C2228: '.detach' 왼쪽에는 클래스/구조체/공용 구조체가 있어야 합니다.
+  e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(60): note: 'unknown-type' 형식입니다.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(61): error C2065: 'workerThread': 선언되지 않은 식별자입니다.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(61): error C2228: '.native_handle' 왼쪽에는 클래스/구조체/공용 구조체가 있어야 합니다.
+  e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(61): note: 'unknown-type' 형식입니다.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(66): error C2789: 'CReadyServer::SOCKETINFO': const 한정 형식의 개체를 초기화해야 합니다.
+  e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.h(14): note: 'CReadyServer::SOCKETINFO' 선언을 참조하십시오.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(79): error C2039: 'Accept': 'CReadyServer'의 멤버가 아닙니다.
+  e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.h(4): note: 'CReadyServer' 선언을 참조하십시오.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(83): error C2065: 'mListenSock': 선언되지 않은 식별자입니다.
+e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\readyserver.cpp(91): error C2065: 'mCPObj': 선언되지 않은 식별자입니다.
