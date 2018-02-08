@@ -53,12 +53,14 @@ DWORD WINAPI thWork(LPVOID hCPObj)
 	DWORD receiveBytes = 0;
 	//DWORD sendBytes;
 	CLink* link = nullptr;
+	LinkPtr linkPtr;
 	DWORD flags = 0;
 	printf("thread Start!");
+//	Test* test = nullptr;
 	while (true)
 	{
 		printf("-");
-		if (GetQueuedCompletionStatus(CPObj, &receiveBytes, (PULONG_PTR)&link, (LPOVERLAPPED*)&link, INFINITE) == 0)
+		if (GetQueuedCompletionStatus(CPObj, &receiveBytes, (PULONG_PTR)(&link), (LPOVERLAPPED*)&linkPtr, INFINITE) == 0)
 		{
 			printf("Error - GetQueuedCompletionStatus(error_code : %d)\n", WSAGetLastError());
 			closesocket(*(link->GetClientSocket()));
@@ -74,6 +76,8 @@ DWORD WINAPI thWork(LPVOID hCPObj)
 		}
 		else
 		{
+			link = linkPtr.get();
+
 			if (WSARecv(*(link->GetClientSocket()), &(link->mDataBuf), 1, &receiveBytes, &flags, &link->mOverlapped, NULL) == SOCKET_ERROR)
 			{
 				if (WSAGetLastError() == WSA_IO_PENDING)
@@ -88,6 +92,9 @@ DWORD WINAPI thWork(LPVOID hCPObj)
 				}
 			}
 			printf("TRACE - Receive message : %s (%d bytes)\n", link->mDataBuf.buf, link->mDataBuf.len);
+
+			
+
 		}
 	}
 }
@@ -133,6 +140,7 @@ CLink* CReadyServer::Accept()
 		return nullptr;
 	}
 	CLink* link = new CLink(clientSocket);
+	//Test* test = new Test(87);
 	mCPObj = CreateIoCompletionPort((HANDLE)(*(clientSocket)), mCPObj, (ULONG_PTR)(link), 0); // Client¿Í CP ¿¬°á
 	return link;
 }

@@ -16,16 +16,25 @@
     <Filter Include="PreparationServer">
       <UniqueIdentifier>{9d6c1169-87da-4e5f-90ca-5bee64d1aaaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Link">
+      <UniqueIdentifier>{30c8962a-9a61-410b-a343-736fb1a73bea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Area">
+      <UniqueIdentifier>{5b11b51e-8700-48cd-95b1-9417b7eb9d07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReadyServer.cpp">
       <Filter>PreparationServer</Filter>
     </ClCompile>
-    <ClCompile Include="Link.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Link.cpp">
+      <Filter>Link</Filter>
+    </ClCompile>
+    <ClCompile Include="Area.cpp">
+      <Filter>Area</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,7 +45,10 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Link.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Link</Filter>
+    </ClInclude>
+    <ClInclude Include="Area.h">
+      <Filter>Area</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

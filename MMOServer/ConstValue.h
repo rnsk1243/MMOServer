@@ -1,27 +1,73 @@
 #pragma once
 #include<WinSock2.h>
 
-struct SOCKETINFO
-{
-	WSAOVERLAPPED mOverlapped;
-	SOCKADDR_IN mClientAddr;
-	SOCKET mClientSocket;
-	const SOCKETINFO()
-	{
-		memset(&mClientAddr, 0, sizeof(SOCKADDR_IN));
-	}
-	const SOCKETINFO(const SOCKET& clientSock, const SOCKADDR_IN clientAddr)
-		:mClientSocket(clientSock), mClientAddr(clientAddr)
-	{
-		memset(&mClientAddr, 0, sizeof(SOCKADDR_IN));
-	}
-
-};
-
-struct Test
-{
-	int data;
-};
-
 const int Port = 9000;
 const int MYBUFSIZE = 1024;
+const int ChatBufSize = 128;
+
+enum ProtocolInfo
+{
+	None,
+	Tr,
+	Chat
+};
+
+struct MyVector3
+{
+	float x;
+	float y;
+	float z;
+
+	MyVector3():
+		x(0.0f),y(0.0f),z(0.0f)
+	{
+	}
+	MyVector3(float _x, float _y, float _z) :
+		x(_x), y(_y), z(_z)
+	{
+	}
+};
+
+struct MyTransform
+{
+	MyVector3 Position;
+	MyVector3 Rotation;
+	MyVector3 Scale;
+
+	MyTransform()
+	{}
+
+	MyTransform(MyVector3 pos, MyVector3 rot, MyVector3 sca):
+		Position(pos), Rotation(rot), Scale(sca)
+	{
+
+	}
+};
+
+struct Packet // 168byte
+{
+	int InfoProtocol; // 4byte
+	MyTransform Tr; // 36byte
+	char ChatMessage[ChatBufSize]; // ChatBufSize byte
+
+	Packet(int infoProtocol, MyTransform tr, const char* chatMessage = nullptr):
+		InfoProtocol(infoProtocol), Tr(tr)
+	{
+		if (nullptr != chatMessage)
+		{
+			strcpy_s(ChatMessage, ChatBufSize, chatMessage);
+		}
+	}
+
+	Packet(int infoProtocol, const char* chatMessage) :
+		InfoProtocol(infoProtocol)
+	{
+		if (nullptr != chatMessage)
+		{
+			strcpy_s(ChatMessage, ChatBufSize, chatMessage);
+		}
+	}
+};
+
+
+

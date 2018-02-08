@@ -18,5 +18,6 @@ public:
 	~CLink();
 	SOCKET* GetClientSocket();
 	WSABUF mDataBuf;
+	void SendnMine(const Packet & packet);
 };
 
