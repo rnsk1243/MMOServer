@@ -31,7 +31,7 @@ const bool CReadyServer::Listen()
 		return false;
 	}
 	int listenResult = listen(mListenSock, 5);
-	std::cout << "Error Code3 = " << WSAGetLastError() << std::endl;
+//	std::cout << "Error Code3 = " << WSAGetLastError() << std::endl;
 	if (listenResult == SOCKET_ERROR)
 	{
 		printf("Error - Fail listen\n");
@@ -54,31 +54,44 @@ DWORD WINAPI thWork(LPVOID hCPObj)
 	//DWORD sendBytes;
 	CLink* link = nullptr;
 	LinkPtr linkPtr;
+	CAreaManager* areas = nullptr;
+	
 	DWORD flags = 0;
+	Packet recvPacket;
 	printf("thread Start!");
+	const int recvSize = sizeof(Packet);
 //	Test* test = nullptr;
 	while (true)
 	{
-		printf("-");
-		if (GetQueuedCompletionStatus(CPObj, &receiveBytes, (PULONG_PTR)(&link), (LPOVERLAPPED*)&linkPtr, INFINITE) == 0)
+		printf("-\n");
+		if (GetQueuedCompletionStatus(CPObj, &receiveBytes, (PULONG_PTR)(&areas), (LPOVERLAPPED*)&linkPtr, INFINITE) == 0)
 		{
 			printf("Error - GetQueuedCompletionStatus(error_code : %d)\n", WSAGetLastError());
-			closesocket(*(link->GetClientSocket()));
-			link = nullptr;
+			closesocket(*(linkPtr.get()->GetClientSocket()));
 			return 1;
 		}
 		printf("!!!");
 		if (receiveBytes == 0)
 		{
 			printf("Error - receiveBytes == 0");
-			link = nullptr;
 			continue;
 		}
 		else
 		{
-			link = linkPtr.get();
-
-			if (WSARecv(*(link->GetClientSocket()), &(link->mDataBuf), 1, &receiveBytes, &flags, &link->mOverlapped, NULL) == SOCKET_ERROR)
+			//link = linkPtr.get();
+			WSABUF wsabuf;
+			char mMessageBuf[RecvBufSize];
+			wsabuf.buf = mMessageBuf;
+			wsabuf.len = RecvBufSize;
+			memcpy_s(&recvPacket, recvSize, linkPtr.get()->GetRecvBuf().buf, recvSize);
+			printf("packet protocol %d\n", recvPacket.InfoProtocol);
+			printf("packet position.x %f\n", recvPacket.Tr.Position.x);
+			printf("packet message %s\n", recvPacket.ChatMessage);
+			recvPacket.InfoProtocol = ProtocolInfo::Chat;
+			areas->Broadcast(linkPtr, recvPacket);
+			//link->Recvn(flags);
+			
+			/*if (WSARecv(*(link->GetClientSocket()), &(link->mDataBuf), 1, &receiveBytes, &flags, &link->mOverlapped, NULL) == SOCKET_ERROR)
 			{
 				if (WSAGetLastError() == WSA_IO_PENDING)
 				{
@@ -91,10 +104,7 @@ DWORD WINAPI thWork(LPVOID hCPObj)
 					continue;
 				}
 			}
-			printf("TRACE - Receive message : %s (%d bytes)\n", link->mDataBuf.buf, link->mDataBuf.len);
-
-			
-
+			printf("TRACE - Receive message : %s (%d bytes)\n", link->mDataBuf.buf, link->mDataBuf.len);*/
 		}
 	}
 }
@@ -118,7 +128,6 @@ CReadyServer::CReadyServer()
 {
 	if (!Listen())
 		exit(1);
-
 }
 
 
@@ -128,7 +137,7 @@ CReadyServer::~CReadyServer()
 	WSACleanup();
 }
 
-CLink* CReadyServer::Accept()
+CLink* CReadyServer::Accept(CAreaManager* areaManager)
 {
 	int addrLen = sizeof(SOCKADDR_IN);
 	SOCKET* clientSocket = new SOCKET();
@@ -139,8 +148,10 @@ CLink* CReadyServer::Accept()
 		closesocket(*clientSocket);
 		return nullptr;
 	}
-	CLink* link = new CLink(clientSocket);
+	CLink* link = new CLink(clientSocket, StartCurArea);
+	LinkPtr linkPtr(link);
+	areaManager->EnterArea(StartCurArea, linkPtr);
 	//Test* test = new Test(87);
-	mCPObj = CreateIoCompletionPort((HANDLE)(*(clientSocket)), mCPObj, (ULONG_PTR)(link), 0); // Client와 CP 연결
+	mCPObj = CreateIoCompletionPort((HANDLE)(*(clientSocket)), mCPObj, (ULONG_PTR)(areaManager), 0); // Client와 CP 연결
 	return link;
 }

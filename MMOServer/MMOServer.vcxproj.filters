@@ -36,6 +36,9 @@
     <ClCompile Include="Area.cpp">
       <Filter>Area</Filter>
     </ClCompile>
+    <ClCompile Include="AreaManager.cpp">
+      <Filter>Area</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReadyServer.h">
@@ -48,6 +51,9 @@
       <Filter>Link</Filter>
     </ClInclude>
     <ClInclude Include="Area.h">
+      <Filter>Area</Filter>
+    </ClInclude>
+    <ClInclude Include="AreaManager.h">
       <Filter>Area</Filter>
     </ClInclude>
   </ItemGroup>

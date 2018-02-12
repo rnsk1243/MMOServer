@@ -1,16 +1,18 @@
 #pragma once
 #include<WinSock2.h>
 #include"Link.h"
+#include"AreaManager.h"
+
 class CReadyServer
 {
 	WSADATA mWSAData;
 	SOCKET mListenSock;
 	SOCKADDR_IN mServerAddr;
 	HANDLE mCPObj;
-	const bool Listen();
 	void MakeThreadPool(int actThreadNum = 0);
+	const bool Listen();
 public:
 	CReadyServer();
 	~CReadyServer();
-	CLink* Accept();
+	CLink* Accept(CAreaManager* areaManager);
 };

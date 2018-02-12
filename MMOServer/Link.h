@@ -12,12 +12,16 @@ public:
 private:
 	SOCKADDR_IN mClientAddr;
 	SOCKET* mClientSocket;
-	char mMessageBuf[MYBUFSIZE];
+	char mMessageBuf[RecvBufSize];
+	WSABUF mRecvWsaBuf;
+	int mCurAreaNumber;
 public:
-	CLink(SOCKET* clientSocket);
+	CLink(SOCKET* clientSocket, int curAreaNumber);
 	~CLink();
 	SOCKET* GetClientSocket();
-	WSABUF mDataBuf;
 	void SendnMine(const Packet & packet);
+	void Recvn(DWORD flags);
+	WSABUF GetRecvBuf();
+	int GetCurArea();
 };
 

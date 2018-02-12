@@ -1,9 +1,4 @@
-﻿  ReadyServer.cpp
-  main.cpp
-  Link.cpp
-e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\link.cpp(31): warning C4477: 'printf' : 서식 문자열 '%zd'에 'unsigned __int64' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'const int'입니다.
-  e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\link.cpp(31): note: 서식 문자열에서 '%d'을(를) 사용하는 것이 좋습니다.
-  e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\link.cpp(31): note: 서식 문자열에서 '%I32d'을(를) 사용하는 것이 좋습니다.
+﻿  Link.cpp
   Area.cpp
   코드를 생성하고 있습니다...
   MMOServer.vcxproj -> E:\MySoloProject\IOCP\MMOServer\MMOServer\x64\Debug\MMOServer.exe

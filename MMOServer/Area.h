@@ -18,5 +18,6 @@ public:
 	CArea(std::string areaName, int areaNum);
 	~CArea();
 	bool PushClient(const LinkPtr& shared_client);
+	void Broadcast(const Packet & packet);
 };
 

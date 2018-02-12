@@ -2,8 +2,10 @@
 #include<WinSock2.h>
 
 const int Port = 9000;
-const int MYBUFSIZE = 1024;
+const int RecvBufSize = 1024;
 const int ChatBufSize = 128;
+const int StartCurArea = 0;
+const int AreaAmount = 3;
 
 enum ProtocolInfo
 {
@@ -49,6 +51,9 @@ struct Packet // 168byte
 	int InfoProtocol; // 4byte
 	MyTransform Tr; // 36byte
 	char ChatMessage[ChatBufSize]; // ChatBufSize byte
+
+	Packet()
+	{}
 
 	Packet(int infoProtocol, MyTransform tr, const char* chatMessage = nullptr):
 		InfoProtocol(infoProtocol), Tr(tr)
