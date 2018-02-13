@@ -150,15 +150,23 @@
     <ClInclude Include="Area.h" />
     <ClInclude Include="AreaManager.h" />
     <ClInclude Include="ConstValue.h" />
+    <ClInclude Include="EnumInfo.h" />
+    <ClInclude Include="ErrorCode.h" />
+    <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="Link.h" />
+    <ClInclude Include="RAII.h" />
     <ClInclude Include="ReadyServer.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Area.cpp" />
     <ClCompile Include="AreaManager.cpp" />
+    <ClCompile Include="ErrorCode.cpp" />
+    <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="Link.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ReadyServer.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

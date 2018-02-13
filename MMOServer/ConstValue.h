@@ -1,18 +1,19 @@
 #pragma once
 #include<WinSock2.h>
+#include<iostream>
 
 const int Port = 9000;
 const int RecvBufSize = 1024;
 const int ChatBufSize = 128;
 const int StartCurArea = 0;
 const int AreaAmount = 3;
+const int timeKind = 6; // 시간 종류 갯수 (년, 월, 일, 시, 분, 초) 6개
 
-enum ProtocolInfo
-{
-	None,
-	Tr,
-	Chat
-};
+const std::string ErrorLogTxt = "ErrorLog.txt";
+const std::string ErrorLV_Serious = "[심각]";
+const std::string ErrorLV_Normal = "[보통]";
+const std::string ErrorLV_Low = "[낮음]";
+const std::string ErrorLV_UnKnown = "[정의되지 않은 레벨]";
 
 struct MyVector3
 {

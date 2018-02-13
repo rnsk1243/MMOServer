@@ -16,6 +16,7 @@ public:
 	CAreaManager& operator=(const CAreaManager&) = delete;
 	CAreaManager(const CAreaManager&) = delete;
 	void EnterArea(int areaNumber, LinkPtr linkPtr);
+	void EraseClient(LinkPtr linkPtr);
 	void Broadcast(LinkPtr link, const Packet& packet);
 };
 

@@ -22,6 +22,9 @@
     <Filter Include="Area">
       <UniqueIdentifier>{5b11b51e-8700-48cd-95b1-9417b7eb9d07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TakeError">
+      <UniqueIdentifier>{9c4b2628-7445-4165-8a27-583efe63d599}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReadyServer.cpp">
@@ -39,6 +42,15 @@
     <ClCompile Include="AreaManager.cpp">
       <Filter>Area</Filter>
     </ClCompile>
+    <ClCompile Include="ErrorHandler.cpp">
+      <Filter>TakeError</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorCode.cpp">
+      <Filter>TakeError</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReadyServer.h">
@@ -55,6 +67,21 @@
     </ClInclude>
     <ClInclude Include="AreaManager.h">
       <Filter>Area</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorHandler.h">
+      <Filter>TakeError</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorCode.h">
+      <Filter>TakeError</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumInfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RAII.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

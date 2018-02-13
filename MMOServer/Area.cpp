@@ -1,4 +1,5 @@
 #include "Area.h"
+#include"RAII.h"
 
 CArea::CArea(std::string areaName, int areaNum):
 	mAreaName(areaName), mAreaNumber(areaNum), mAmountPeople(0)
@@ -23,7 +24,25 @@ void CArea::Broadcast(const Packet & packet)
 	for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
 	{
 		//++i;
-		(*linkIterBegin).get()->SendnMine(packet);
+		if (false == (*linkIterBegin).get()->SendnMine(packet))
+		{
+			ScopeLock<CRITICALSECTION> CS(mCS);
+			linkIterBegin = mClientInfos.erase(linkIterBegin);
+		}
 		//printf("º¸³½ È½¼ö : %d", i);
+	}
+}
+
+void CArea::EraseClient(const int & clientPKnum)
+{
+	LinkListIt linkIterBegin = mClientInfos.begin();
+	for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
+	{
+		if (clientPKnum == (*linkIterBegin).get()->GetMyPKNumber())
+		{
+			ScopeLock<CRITICALSECTION> CS(mCS);
+			linkIterBegin = mClientInfos.erase(linkIterBegin);
+			return;
+		}
 	}
 }

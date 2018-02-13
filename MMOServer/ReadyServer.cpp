@@ -3,6 +3,7 @@
 #include<iostream>
 #include<thread>
 #include"ConstValue.h"
+#include"EnumInfo.h"
 
 const bool CReadyServer::Listen()
 {
@@ -89,7 +90,10 @@ DWORD WINAPI thWork(LPVOID hCPObj)
 			printf("packet message %s\n", recvPacket.ChatMessage);
 			recvPacket.InfoProtocol = ProtocolInfo::Chat;
 			areas->Broadcast(linkPtr, recvPacket);
-			//link->Recvn(flags);
+			if (false == linkPtr.get()->Recvn(flags))
+			{
+				areas->EraseClient(linkPtr);
+			}
 			
 			/*if (WSARecv(*(link->GetClientSocket()), &(link->mDataBuf), 1, &receiveBytes, &flags, &link->mOverlapped, NULL) == SOCKET_ERROR)
 			{

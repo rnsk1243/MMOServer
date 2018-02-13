@@ -19,9 +19,11 @@ public:
 	CLink(SOCKET* clientSocket, int curAreaNumber);
 	~CLink();
 	SOCKET* GetClientSocket();
-	void SendnMine(const Packet & packet);
-	void Recvn(DWORD flags);
+	bool SendnMine(const Packet & packet);
+	bool Recvn(DWORD flags);
 	WSABUF GetRecvBuf();
 	int GetCurArea();
+	const int GetMyPKNumber();
+	const std::string& GetMyName();
 };
 

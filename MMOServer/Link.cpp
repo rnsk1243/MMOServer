@@ -1,5 +1,5 @@
 #include "Link.h"
-
+#include"ErrorHandler.h"
 
 
 CLink::CLink(SOCKET* clientSocket, int curAreaNumber):
@@ -24,7 +24,7 @@ SOCKET * CLink::GetClientSocket()
 	return mClientSocket;
 }
 
-void CLink::SendnMine(const Packet & packet)
+bool CLink::SendnMine(const Packet & packet)
 {
 	DWORD sendBytes;
 	WSABUF wsBuf;
@@ -44,13 +44,15 @@ void CLink::SendnMine(const Packet & packet)
 		{
 			printf("Error - Fail WSASend(error_code : %d)\n", WSAGetLastError());
 			// 예외처리 필요.
-			return;
+			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorSendnMine, this);
+			return false;
 		}
 	}
 	printf("보낸 byte수 : %d \n", sendBytes);
+	return true;
 }
 
-void CLink::Recvn(DWORD flags)
+bool CLink::Recvn(DWORD flags)
 {
 	DWORD receiveBytes;
 	const int recvSize = sizeof(Packet);
@@ -65,16 +67,11 @@ void CLink::Recvn(DWORD flags)
 		{
 			printf("Error - Fail WSARecv(error_code : %d)\n", WSAGetLastError());
 			// 예외처리 필요.
+			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorRecvn, this);
+			return false;
 		}
 	}
-	//if (WSAGetLastError() != WSA_IO_PENDING)
-	//{
-	//	memcpy_s(&packet, recvSize, mRecvWsaBuf.buf, recvSize);
-	//	printf("packet protocol %d\n", packet.InfoProtocol);
-	//	printf("packet position.x %f\n", packet.Tr.Position.x);
-	//	printf("packet message %s\n", packet.ChatMessage);
-	//}
-	
+	return true;
 }
 
 WSABUF CLink::GetRecvBuf()
@@ -85,4 +82,14 @@ WSABUF CLink::GetRecvBuf()
 int CLink::GetCurArea()
 {
 	return mCurAreaNumber;
+}
+
+const int CLink::GetMyPKNumber()
+{
+	return 0;
+}
+
+const std::string & CLink::GetMyName()
+{
+	return "임시이름";
 }
