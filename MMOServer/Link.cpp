@@ -2,8 +2,8 @@
 #include"ErrorHandler.h"
 
 
-CLink::CLink(SOCKET* clientSocket, int curAreaNumber):
-	mCurAreaNumber(curAreaNumber)
+CLink::CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode):
+	mCurAreaNumber(curAreaNumber), mMyDistinguishCode(distinguishcode)
 {
 	memset((void*)this, 0x00, sizeof(CLink));
 	mClientSocket = clientSocket;
@@ -84,12 +84,12 @@ int CLink::GetCurArea()
 	return mCurAreaNumber;
 }
 
-const int CLink::GetMyPKNumber()
+const int CLink::GetMyDistinguishCode()
 {
-	return 0;
+	return mMyDistinguishCode;
 }
 
-const std::string & CLink::GetMyName()
-{
-	return "임시이름";
-}
+//const std::string & CLink::GetMyName()
+//{
+//	return "임시이름";
+//}

@@ -38,7 +38,7 @@ void CArea::EraseClient(const int & clientPKnum)
 	LinkListIt linkIterBegin = mClientInfos.begin();
 	for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
 	{
-		if (clientPKnum == (*linkIterBegin).get()->GetMyPKNumber())
+		if (clientPKnum == (*linkIterBegin).get()->GetMyDistinguishCode())
 		{
 			ScopeLock<CRITICALSECTION> CS(mCS);
 			linkIterBegin = mClientInfos.erase(linkIterBegin);

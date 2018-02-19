@@ -69,7 +69,7 @@ void CErrorHandler::GetErrorClientInfo(CLink* client, std::vector<std::string>& 
 	else
 	{
 		localStrVector.reserve(2);
-		localStrVector.push_back(UtilPtr->IntToString(client->GetMyPKNumber()));
+		localStrVector.push_back(UtilPtr->IntToString(client->GetMyDistinguishCode()));
 		//localStrVector.push_back(string(client->GetMyName()));
 		localStrVector.push_back("임시이름");
 	}

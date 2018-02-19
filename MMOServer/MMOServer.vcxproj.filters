@@ -25,6 +25,9 @@
     <Filter Include="TakeError">
       <UniqueIdentifier>{9c4b2628-7445-4165-8a27-583efe63d599}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThreadInfo">
+      <UniqueIdentifier>{3e488767-6a85-4e8e-81c1-2378ed496902}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ReadyServer.cpp">
@@ -49,6 +52,15 @@
       <Filter>TakeError</Filter>
     </ClCompile>
     <ClCompile Include="Util.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkThreadInfo.cpp">
+      <Filter>ThreadInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandMap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstValue.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -81,6 +93,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="RAII.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkThreadInfo.h">
+      <Filter>ThreadInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandMap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

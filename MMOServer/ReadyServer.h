@@ -11,6 +11,9 @@ class CReadyServer
 	HANDLE mCPObj;
 	void MakeThreadPool(int actThreadNum = 0);
 	const bool Listen();
+	int mNextDistinguishCode;
+	void IncreaseDisCode();
+	int GetDistinguishcode();
 public:
 	CReadyServer();
 	~CReadyServer();

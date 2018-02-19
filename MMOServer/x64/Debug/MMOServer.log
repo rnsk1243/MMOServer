@@ -1,12 +1,14 @@
-﻿  Util.cpp
+﻿  WorkThreadInfo.cpp
+  Util.cpp
   ReadyServer.cpp
   main.cpp
   Link.cpp
   ErrorHandler.cpp
   ErrorCode.cpp
+  ConstValue.cpp
+  CommandMap.cpp
   AreaManager.cpp
   Area.cpp
   코드를 생성하고 있습니다...
-e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\link.cpp(94): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
   MMOServer.vcxproj -> E:\MySoloProject\IOCP\MMOServer\MMOServer\x64\Debug\MMOServer.exe
   MMOServer.vcxproj -> E:\MySoloProject\IOCP\MMOServer\MMOServer\x64\Debug\MMOServer.pdb (Full PDB)

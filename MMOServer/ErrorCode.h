@@ -3,5 +3,7 @@
 enum ErrorCode
 {
 	ErrorSendnMine,	
-	ErrorRecvn
+	ErrorRecvn,
+	ErrorGetQueuedCompletionStatusZeroReturn,
+	ErrorGetQueuedCompletionStatusReceiveByteZero
 };

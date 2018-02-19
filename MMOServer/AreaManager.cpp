@@ -25,7 +25,7 @@ void CAreaManager::EnterArea(int areaNumber, LinkPtr linkPtr)
 void CAreaManager::EraseClient(LinkPtr linkPtr)
 {
 	int myArea = linkPtr.get()->GetCurArea();
-	mAreas[myArea].get()->EraseClient(linkPtr.get()->GetMyPKNumber());
+	mAreas[myArea].get()->EraseClient(linkPtr.get()->GetMyDistinguishCode());
 }
 
 void CAreaManager::Broadcast(LinkPtr link, const Packet& packet)

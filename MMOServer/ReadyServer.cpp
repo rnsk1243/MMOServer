@@ -4,6 +4,7 @@
 #include<thread>
 #include"ConstValue.h"
 #include"EnumInfo.h"
+#include"WorkThreadInfo.h"
 
 const bool CReadyServer::Listen()
 {
@@ -48,69 +49,9 @@ const bool CReadyServer::Listen()
 	return true;
 }
 
-DWORD WINAPI thWork(LPVOID hCPObj)
+void CReadyServer::IncreaseDisCode()
 {
-	HANDLE CPObj = *((HANDLE*)hCPObj);
-	DWORD receiveBytes = 0;
-	//DWORD sendBytes;
-	CLink* link = nullptr;
-	LinkPtr linkPtr;
-	CAreaManager* areas = nullptr;
-	
-	DWORD flags = 0;
-	Packet recvPacket;
-	printf("thread Start!");
-	const int recvSize = sizeof(Packet);
-//	Test* test = nullptr;
-	while (true)
-	{
-		printf("-\n");
-		if (GetQueuedCompletionStatus(CPObj, &receiveBytes, (PULONG_PTR)(&areas), (LPOVERLAPPED*)&linkPtr, INFINITE) == 0)
-		{
-			printf("Error - GetQueuedCompletionStatus(error_code : %d)\n", WSAGetLastError());
-			closesocket(*(linkPtr.get()->GetClientSocket()));
-			return 1;
-		}
-		printf("!!!");
-		if (receiveBytes == 0)
-		{
-			printf("Error - receiveBytes == 0");
-			continue;
-		}
-		else
-		{
-			//link = linkPtr.get();
-			WSABUF wsabuf;
-			char mMessageBuf[RecvBufSize];
-			wsabuf.buf = mMessageBuf;
-			wsabuf.len = RecvBufSize;
-			memcpy_s(&recvPacket, recvSize, linkPtr.get()->GetRecvBuf().buf, recvSize);
-			printf("packet protocol %d\n", recvPacket.InfoProtocol);
-			printf("packet position.x %f\n", recvPacket.Tr.Position.x);
-			printf("packet message %s\n", recvPacket.ChatMessage);
-			recvPacket.InfoProtocol = ProtocolInfo::Chat;
-			areas->Broadcast(linkPtr, recvPacket);
-			if (false == linkPtr.get()->Recvn(flags))
-			{
-				areas->EraseClient(linkPtr);
-			}
-			
-			/*if (WSARecv(*(link->GetClientSocket()), &(link->mDataBuf), 1, &receiveBytes, &flags, &link->mOverlapped, NULL) == SOCKET_ERROR)
-			{
-				if (WSAGetLastError() == WSA_IO_PENDING)
-				{
-					printf("thread PENDING...\n");
-				}
-				else
-				{
-					printf("Error - Fail WSARecv(error_code : %d)\n", WSAGetLastError());
-					link = nullptr;
-					continue;
-				}
-			}
-			printf("TRACE - Receive message : %s (%d bytes)\n", link->mDataBuf.buf, link->mDataBuf.len);*/
-		}
-	}
+	++mNextDistinguishCode;
 }
 
 void CReadyServer::MakeThreadPool(int actThreadNum)
@@ -122,13 +63,14 @@ void CReadyServer::MakeThreadPool(int actThreadNum)
 	int threadAmount = systemInfo.dwNumberOfProcessors * 2;
 	for (int i = 0; i < threadAmount; ++i)
 	{
-		std::thread workerThread(thWork, &mCPObj);
+		std::thread workerThread(WorkThreadInfo::ThreadWork, &mCPObj);
 		workerThread.detach();
 		CloseHandle(workerThread.native_handle());
 	}
 }
 
-CReadyServer::CReadyServer()
+CReadyServer::CReadyServer():
+	mNextDistinguishCode(StartDistinguishCode)
 {
 	if (!Listen())
 		exit(1);
@@ -152,10 +94,18 @@ CLink* CReadyServer::Accept(CAreaManager* areaManager)
 		closesocket(*clientSocket);
 		return nullptr;
 	}
-	CLink* link = new CLink(clientSocket, StartCurArea);
+	int disCode = GetDistinguishcode();
+	CLink* link = new CLink(clientSocket, StartCurArea, disCode);
 	LinkPtr linkPtr(link);
 	areaManager->EnterArea(StartCurArea, linkPtr);
 	//Test* test = new Test(87);
 	mCPObj = CreateIoCompletionPort((HANDLE)(*(clientSocket)), mCPObj, (ULONG_PTR)(areaManager), 0); // Client¿Í CP ¿¬°á
 	return link;
+}
+
+int CReadyServer::GetDistinguishcode()
+{
+	int retunVal = mNextDistinguishCode;
+	IncreaseDisCode();
+	return retunVal;
 }

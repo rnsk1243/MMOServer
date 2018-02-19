@@ -3,6 +3,7 @@
 enum ProtocolInfo
 {
 	None,
+	Request,
 	Tr,
 	Chat
 };

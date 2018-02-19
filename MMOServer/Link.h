@@ -15,15 +15,16 @@ private:
 	char mMessageBuf[RecvBufSize];
 	WSABUF mRecvWsaBuf;
 	int mCurAreaNumber;
+	int mMyDistinguishCode;
 public:
-	CLink(SOCKET* clientSocket, int curAreaNumber);
+	CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode);
 	~CLink();
 	SOCKET* GetClientSocket();
 	bool SendnMine(const Packet & packet);
-	bool Recvn(DWORD flags);
+	bool Recvn(DWORD flags = 0);
 	WSABUF GetRecvBuf();
 	int GetCurArea();
-	const int GetMyPKNumber();
-	const std::string& GetMyName();
+	const int GetMyDistinguishCode();
+	//const std::string& GetMyName();
 };
 
