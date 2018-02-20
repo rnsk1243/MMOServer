@@ -2,10 +2,11 @@
 #include"ErrorHandler.h"
 
 
-CLink::CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode):
-	mCurAreaNumber(curAreaNumber), mMyDistinguishCode(distinguishcode)
+CLink::CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode)
 {
 	memset((void*)this, 0x00, sizeof(CLink));
+	mCurAreaNumber = curAreaNumber;
+	mMyDistinguishCode = distinguishcode;
 	mClientSocket = clientSocket;
 	memset(&mClientAddr, 0, sizeof(SOCKADDR_IN));
 	mRecvWsaBuf.buf = mMessageBuf;
@@ -29,7 +30,8 @@ bool CLink::SendnMine(const Packet & packet)
 	DWORD sendBytes;
 	WSABUF wsBuf;
 	const int sendSize = sizeof(Packet);
-	printf("Packet Size = %d\n", sendSize);
+	//printf("Packet Size = %d\n", sendSize);
+	printf("보내는 구별 번호 = %d\n", packet.RequestVal);
 	char sendTemp[sendSize];
 	wsBuf.buf = sendTemp; wsBuf.len = sendSize;
 
@@ -48,7 +50,7 @@ bool CLink::SendnMine(const Packet & packet)
 			return false;
 		}
 	}
-	printf("보낸 byte수 : %d \n", sendBytes);
+	//printf("보낸 byte수 : %d \n", sendBytes);
 	return true;
 }
 

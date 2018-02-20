@@ -105,7 +105,8 @@ CLink* CReadyServer::Accept(CAreaManager* areaManager)
 
 int CReadyServer::GetDistinguishcode()
 {
-	int retunVal = mNextDistinguishCode;
+	int returnVal = mNextDistinguishCode;
 	IncreaseDisCode();
-	return retunVal;
+	printf("구별번호 반환 : %d\n", returnVal);
+	return returnVal;
 }

@@ -44,10 +44,10 @@ DWORD WorkThreadInfo::ThreadWork(LPVOID hCPObj)
 			wsabuf.buf = mMessageBuf;
 			wsabuf.len = RecvBufSize;
 			memcpy_s(&recvPacket, recvSize, linkPtr.get()->GetRecvBuf().buf, recvSize);
-			printf("packet protocol %d\n", recvPacket.InfoProtocol);
-			printf("packet position.x %f\n", recvPacket.Tr.Position.x);
-			printf("packet message %s\n", recvPacket.ChatMessage);
-
+			//printf("packet protocol %d\n", recvPacket.InfoProtocol);
+			//printf("packet position.x %f\n", recvPacket.Tr.Position.x);
+			//printf("packet message %s\n", recvPacket.ChatMessage);
+			printf("GetMyDistinguishCode = %d\n", linkPtr.get()->GetMyDistinguishCode());
 			if (recvPacket.InfoProtocol == ProtocolInfo::Request)
 			{
 				commandMap.Call(recvPacket.ChatMessage, linkPtr.get());

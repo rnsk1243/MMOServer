@@ -5,6 +5,7 @@
 void CCommandMap::SendMyDistinguishCode(CLink * targetClient)
 {
 	Packet p(ProtocolInfo::Request, targetClient->GetMyDistinguishCode(), RequestCollection::GetInstance()->SendDistinguishCode.c_str());
+	printf("sendMyDistinguishcode = %d", p.RequestVal);
 	targetClient->SendnMine(p);
 }
 
