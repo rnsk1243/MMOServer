@@ -3,7 +3,8 @@
 #include"ConstValue.h"
 
 
-CErrorHandler::CErrorHandler()
+CErrorHandler::CErrorHandler() :
+	IsGabStart(false)
 {
 }
 
@@ -101,6 +102,18 @@ void CErrorHandler::TakeError(ErrorLevel errorLV, ErrorCode code, CLink* targetC
 	vector<string> errorLog;
 	MakeErrorFrame(errorLV, code, errorLog);
 	if (nullptr != targetClient)
+	{
 		GetErrorClientInfo(targetClient, errorLog);
+		switch (code)
+		{
+		case ErrorCode::ErrorRecvn:
+		case ErrorCode::ErrorSendnMine:
+			targetClient->SetErrorState();
+			IsGabStart = true;
+			break;
+		default:
+			break;
+		}
+	}
 	Write(ErrorLogTxt.c_str(), errorLog);
 }

@@ -16,6 +16,7 @@ class CErrorHandler
 	void MakeErrorFrame(ErrorLevel errorLV, ErrorCode code, std::vector<std::string> & result);
 public:
 	static CErrorHandler* GetInstance();
+	bool IsGabStart;
 	~CErrorHandler();
 	void TakeError(ErrorLevel errorLV, ErrorCode code, CLink* targetClient = nullptr);
 };

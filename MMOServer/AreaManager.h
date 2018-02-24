@@ -9,14 +9,17 @@ typedef AreaVector::iterator AreaVectorIt;
 
 class CAreaManager
 {
+	HANDLE hRemoveEvent;
+	HANDLE hBroadcastEvent;
 	AreaVector mAreas;
+//	void PatrolErrorLinkWorkThread();
 public:
 	CAreaManager(int areaAmount);
 	~CAreaManager();
 	CAreaManager& operator=(const CAreaManager&) = delete;
 	CAreaManager(const CAreaManager&) = delete;
 	void EnterArea(int areaNumber, LinkPtr linkPtr);
-	void EraseClient(LinkPtr linkPtr);
-	void Broadcast(LinkPtr link, const Packet& packet);
+	//void EraseClient(LinkPtr linkPtr);
+	void Broadcast(LinkPtr link, const PacketKindEnum PacketKind, LPVOID packet);
 };
 

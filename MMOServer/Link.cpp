@@ -2,9 +2,30 @@
 #include"ErrorHandler.h"
 
 
+void CLink::Sendn(WSABUF wsaBuf, LPVOID packet)
+{
+	DWORD sendBytes;
+	memcpy_s(wsaBuf.buf, wsaBuf.len, packet, wsaBuf.len);
+	if (WSASend(*mClientSocket, &wsaBuf, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() == WSA_IO_PENDING)
+		{
+			printf("SendnMine PENDING...\n");
+		}
+		else
+		{
+			printf("Error - Fail WSASend(error_code : %d)\n", WSAGetLastError());
+			// 예외처리 필요.
+			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorSendnMine, this);
+		}
+	}
+	//printf("보낸 byte수 : %d \n", sendBytes);
+}
+
 CLink::CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode)
 {
 	memset((void*)this, 0x00, sizeof(CLink));
+	mIsErrorState = false;
 	mCurAreaNumber = curAreaNumber;
 	mMyDistinguishCode = distinguishcode;
 	mClientSocket = clientSocket;
@@ -24,40 +45,69 @@ SOCKET * CLink::GetClientSocket()
 {
 	return mClientSocket;
 }
+//
+//bool CLink::SendnMine(const Packet & packet)
+//{
+//	DWORD sendBytes;
+//	WSABUF wsBuf;
+//	const int sendSize = sizeof(Packet);
+//	//printf("Packet Size = %d\n", sendSize);
+//	printf("보내는 구별 번호 = %d\n", packet.RequestVal);
+//	char sendTemp[sendSize];
+//	wsBuf.buf = sendTemp; wsBuf.len = sendSize;
+//
+//	memcpy_s(wsBuf.buf, sendSize, (void*)&packet, sendSize);
+//	if (WSASend(*mClientSocket, &wsBuf, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
+//	{
+//		if (WSAGetLastError() == WSA_IO_PENDING)
+//		{
+//			printf("SendnMine PENDING...\n");
+//		}
+//		else
+//		{
+//			printf("Error - Fail WSASend(error_code : %d)\n", WSAGetLastError());
+//			// 예외처리 필요.
+//			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorSendnMine, this);
+//			return false;
+//		}
+//	}
+//	//printf("보낸 byte수 : %d \n", sendBytes);
+//	return true;
+//}
 
-bool CLink::SendnMine(const Packet & packet)
+void CLink::SendnMine(const PacketKindEnum PacketKind, LPVOID packet)
 {
-	DWORD sendBytes;
+	if (mIsErrorState == true)
+		return;
+//	PacketTransform* lpTr = nullptr; PacketMessage* lpM = nullptr;
+	//DWORD sendBytes;
 	WSABUF wsBuf;
-	const int sendSize = sizeof(Packet);
-	//printf("Packet Size = %d\n", sendSize);
-	printf("보내는 구별 번호 = %d\n", packet.RequestVal);
-	char sendTemp[sendSize];
-	wsBuf.buf = sendTemp; wsBuf.len = sendSize;
-
-	memcpy_s(wsBuf.buf, sendSize, (void*)&packet, sendSize);
-	if (WSASend(*mClientSocket, &wsBuf, 1, &sendBytes, 0, NULL, NULL) == SOCKET_ERROR)
-	{
-		if (WSAGetLastError() == WSA_IO_PENDING)
-		{
-			printf("SendnMine PENDING...\n");
-		}
-		else
-		{
-			printf("Error - Fail WSASend(error_code : %d)\n", WSAGetLastError());
-			// 예외처리 필요.
-			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorSendnMine, this);
-			return false;
-		}
+	const int sendSizeTr = sizeof(PacketTransform);
+	const int sendSizeM = sizeof(PacketMessage);
+	switch (PacketKind)
+	{// char 동적할당 하기 싫어서 각case안에 중복되는 코드가 있다..
+	case PacketKindEnum::Transform:
+		printf("Transform 보내기");
+//		lpTr = (PacketTransform*)packet;
+		char sendTempTr[sendSizeTr];
+		wsBuf.buf = sendTempTr; wsBuf.len = sendSizeTr;
+		Sendn(wsBuf, packet);
+	case PacketKindEnum::Message:
+//		lpM = (PacketMessage*)packet;
+		char sendTempM[sendSizeM];
+		wsBuf.buf = sendTempM; wsBuf.len = sendSizeM;
+		Sendn(wsBuf, packet);
+	default:
+		break;
 	}
-	//printf("보낸 byte수 : %d \n", sendBytes);
-	return true;
 }
 
-bool CLink::Recvn(DWORD flags)
+void CLink::Recvn(DWORD flags)
 {
+	if (mIsErrorState == true)
+		return;
 	DWORD receiveBytes;
-	const int recvSize = sizeof(Packet);
+	//const int recvSize = sizeof(Packet);
 	if (WSARecv(*mClientSocket, &mRecvWsaBuf, 1, &receiveBytes, &flags, &mOverlapped, NULL) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() == WSA_IO_PENDING)
@@ -70,10 +120,8 @@ bool CLink::Recvn(DWORD flags)
 			printf("Error - Fail WSARecv(error_code : %d)\n", WSAGetLastError());
 			// 예외처리 필요.
 			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorRecvn, this);
-			return false;
 		}
 	}
-	return true;
 }
 
 WSABUF CLink::GetRecvBuf()
@@ -89,6 +137,16 @@ int CLink::GetCurArea()
 const int CLink::GetMyDistinguishCode()
 {
 	return mMyDistinguishCode;
+}
+
+void CLink::SetErrorState()
+{
+	mIsErrorState = true;
+}
+
+bool CLink::IsErrorClient()
+{
+	return mIsErrorState;
 }
 
 //const std::string & CLink::GetMyName()

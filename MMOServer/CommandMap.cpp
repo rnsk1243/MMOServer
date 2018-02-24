@@ -1,12 +1,16 @@
 #include "CommandMap.h"
 #include"EnumInfo.h"
 
-
 void CCommandMap::SendMyDistinguishCode(CLink * targetClient)
 {
-	Packet p(ProtocolInfo::Request, targetClient->GetMyDistinguishCode(), RequestCollection::GetInstance()->SendDistinguishCode.c_str());
-	printf("sendMyDistinguishcode = %d", p.RequestVal);
-	targetClient->SendnMine(p);
+	//Packet p(ProtocolInfo::Request, targetClient->GetMyDistinguishCode(), RequestCollection::GetInstance()->SendDistinguishCode.c_str());
+	PacketMessage answerPacket(ProtocolInfo::Request, targetClient->GetMyDistinguishCode(), RequestCollection::GetInstance()->SendDistinguishCode.c_str());
+	answerPacket.RequestVal = targetClient->GetMyDistinguishCode();
+	
+	//printf("sendMyDistinguishcode = %d", p.DistinguishCode);
+	//printf("p.Message = %s\n", p.Message);
+
+	targetClient->SendnMine(PacketKindEnum::Message,&answerPacket); // 예외처리 안되어있음.. list제거는 Area클래스에서 스레드를 만들어서 해결해야 할 듯.
 }
 
 CCommandMap::CCommandMap()
