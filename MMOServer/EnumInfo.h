@@ -15,3 +15,9 @@ enum ErrorLevel
 	Low
 };
 
+enum PacketKindEnum
+{
+	Transform,
+	Message
+};
+

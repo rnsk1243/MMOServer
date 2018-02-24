@@ -14,14 +14,15 @@ class CArea
 	std::string mAreaName;
 	int mAmountPeople;
 	const int mAreaNumber;
+	void EraseClient(const int& clientPKnum);
 	//void Removeclient(LinkListIt)
 public:
 	CArea(const CArea&) = delete;
 	CArea& operator=(const CArea&) = delete;
 	CArea(std::string areaName, int areaNum);
 	~CArea();
+	void SearchEndRemoveErrorLink();
 	bool PushClient(const LinkPtr& shared_client);
-	void Broadcast(const Packet & packet);
-	void EraseClient(const int& clientPKnum);
+	void Broadcast(const PacketKindEnum PacketKind, LPVOID packet);
 };
 

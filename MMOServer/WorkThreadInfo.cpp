@@ -19,9 +19,12 @@ DWORD WorkThreadInfo::ThreadWork(LPVOID hCPObj)
 	LinkPtr linkPtr = nullptr;
 	CAreaManager* areas = nullptr;
 	CCommandMap commandMap;
-
-	Packet recvPacket;
-	const int recvSize = sizeof(Packet);
+	int packetKind = WrongValue;
+	PacketTransform packetTr;
+	PacketMessage packetM;
+	//Packet recvPacket;
+	const int recvSizeTr = sizeof(PacketTransform);
+	const int recvSizeM = sizeof(PacketMessage);
 	while (true)
 	{
 		if (GetQueuedCompletionStatus(CPObj, &receiveBytes, (PULONG_PTR)(&areas), (LPOVERLAPPED*)&linkPtr, INFINITE) == 0)
@@ -39,26 +42,46 @@ DWORD WorkThreadInfo::ThreadWork(LPVOID hCPObj)
 		else
 		{
 			//link = linkPtr.get();
-			WSABUF wsabuf;
-			char mMessageBuf[RecvBufSize];
-			wsabuf.buf = mMessageBuf;
-			wsabuf.len = RecvBufSize;
-			memcpy_s(&recvPacket, recvSize, linkPtr.get()->GetRecvBuf().buf, recvSize);
-			//printf("packet protocol %d\n", recvPacket.InfoProtocol);
-			//printf("packet position.x %f\n", recvPacket.Tr.Position.x);
-			//printf("packet message %s\n", recvPacket.ChatMessage);
-			printf("GetMyDistinguishCode = %d\n", linkPtr.get()->GetMyDistinguishCode());
-			if (recvPacket.InfoProtocol == ProtocolInfo::Request)
+			//memcpy_s(&recvPacket, recvSize, linkPtr.get()->GetRecvBuf().buf, recvSize);
+			memcpy_s(&packetKind, 4, linkPtr.get()->GetRecvBuf().buf, 4);
+			printf("받은 사이즈 : %d\n", receiveBytes);
+			printf("받은 패킷 종류 : %d\n", packetKind);
+			// 디시리얼 하기
+			switch (packetKind)
 			{
-				commandMap.Call(recvPacket.ChatMessage, linkPtr.get());
+			case PacketKindEnum::Transform:
+				memcpy_s(&packetTr, recvSizeTr, linkPtr.get()->GetRecvBuf().buf, recvSizeTr);
+				printf("보낼 Tr 종류 : %d\n", packetTr.PacketKind);
+				printf("보낼 Tr Protocol : %d\n", packetTr.InfoProtocol);
+				printf("보낼 Tr 구분 : %d\n", packetTr.DistinguishCode);
+				areas->Broadcast(linkPtr, PacketKindEnum::Transform, &packetTr);
+				break;
+			case PacketKindEnum::Message:
+				memcpy_s(&packetM, recvSizeM, linkPtr.get()->GetRecvBuf().buf, recvSizeM);
+				//printf("받은 message : %s\n", packetM.Message);
+				if (packetM.InfoProtocol == ProtocolInfo::Request)
+				{
+					commandMap.Call(packetM.Message, linkPtr.get());
+					break;
+				}
+				if (packetM.InfoProtocol == ProtocolInfo::Chat)
+				{
+					areas->Broadcast(linkPtr, PacketKindEnum::Message, &packetM);
+					break;
+				}
+				break;
+			default:
+				break;
 			}
+			//printf("packet protocol %d\n", packetTr.InfoProtocol);
+			printf("packet position.x %f\n", packetTr.Tr.Position.x);
+			//printf("packet message %s\n", packetTr.ChatMessage);
+			//printf("GetMyDistinguishCode = %d\n", linkPtr.get()->GetMyDistinguishCode());
+
 
 			/*recvPacket.InfoProtocol = ProtocolInfo::Chat;
 			areas->Broadcast(linkPtr, recvPacket);*/
-			if (false == linkPtr.get()->Recvn())
-			{
-				areas->EraseClient(linkPtr);
-			}
+			linkPtr.get()->Recvn();
 		}
 	}
 }

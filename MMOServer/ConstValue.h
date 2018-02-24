@@ -1,10 +1,12 @@
 #pragma once
 #include<WinSock2.h>
 #include<iostream>
+#include"EnumInfo.h"
+
 
 const int Port = 9000;
 const int RecvBufSize = 1024;
-const int ChatBufSize = 128;
+const int MessageBufSize = 128;
 const int StartCurArea = 0;
 const int AreaAmount = 3;
 const int timeKind = 6; // 시간 종류 갯수 (년, 월, 일, 시, 분, 초) 6개
@@ -49,31 +51,68 @@ struct MyTransform
 	}
 };
 
-struct Packet // 172byte
-{
-	int InfoProtocol; // 4byte
-	int RequestVal; // 4byte
-	MyTransform Tr; // 36byte
-	char ChatMessage[ChatBufSize]; // ChatBufSize byte
+//struct Packet // 172byte
+//{
+//	int InfoProtocol; // 4byte
+//	int RequestVal; // 4byte
+//	MyTransform Tr; // 36byte
+//	char ChatMessage[ChatBufSize]; // ChatBufSize byte
+//
+//	Packet()
+//	{}
+//
+//	Packet(int infoProtocol, int requestVal, MyTransform tr, const char* chatMessage = nullptr):
+//		InfoProtocol(infoProtocol), RequestVal(requestVal), Tr(tr)
+//	{
+//		if (nullptr != chatMessage)
+//		{
+//			strcpy_s(ChatMessage, ChatBufSize, chatMessage);
+//		}
+//	}
+//
+//	Packet(int infoProtocol, int requestVal, const char* chatMessage = nullptr) :
+//		InfoProtocol(infoProtocol), RequestVal(requestVal)
+//	{
+//		if (nullptr != chatMessage)
+//		{
+//			strcpy_s(ChatMessage, ChatBufSize, chatMessage);
+//		}
+//	}
+//};
 
-	Packet()
+struct PacketTransform // 48byte
+{
+	int PacketKind;
+	int InfoProtocol;
+	int DistinguishCode;
+	MyTransform Tr; // 36byte
+
+	PacketTransform():PacketKind(PacketKindEnum::Transform),
+		InfoProtocol(WrongValue),DistinguishCode(WrongValue) // 초기화 되지 않은 것에는 잘 못된 값을 넣어 표시함.
+	{}
+	PacketTransform(int infoProtocol, int distinguishCode, MyTransform tr):PacketKind(PacketKindEnum::Transform),
+		InfoProtocol(infoProtocol), DistinguishCode(distinguishCode), Tr(tr)
+	{}
+};
+
+struct PacketMessage // (16 + ChatBufSize) byte 
+{
+	int PacketKind;
+	int InfoProtocol;
+	int DistinguishCode;
+	int RequestVal;
+	char Message[MessageBufSize]; // ChatBufSize byte
+
+	PacketMessage():PacketKind(PacketKindEnum::Message),
+		InfoProtocol(WrongValue), DistinguishCode(WrongValue), RequestVal(WrongValue) // 초기화 되지 않은 것에는 잘 못된 값을 넣어 표시함.
 	{}
 
-	Packet(int infoProtocol, int requestVal, MyTransform tr, const char* chatMessage = nullptr):
-		InfoProtocol(infoProtocol), RequestVal(requestVal), Tr(tr)
+	PacketMessage(int infoProtocol, int distinguishCode, const char* message):PacketKind(PacketKindEnum::Message),
+		InfoProtocol(infoProtocol), DistinguishCode(distinguishCode), RequestVal(WrongValue)
 	{
-		if (nullptr != chatMessage)
+		if (message != nullptr)
 		{
-			strcpy_s(ChatMessage, ChatBufSize, chatMessage);
-		}
-	}
-
-	Packet(int infoProtocol, int requestVal, const char* chatMessage = nullptr) :
-		InfoProtocol(infoProtocol), RequestVal(requestVal)
-	{
-		if (nullptr != chatMessage)
-		{
-			strcpy_s(ChatMessage, ChatBufSize, chatMessage);
+			strcpy_s(Message, MessageBufSize, message);
 		}
 	}
 };
