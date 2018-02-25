@@ -36,7 +36,7 @@ CLink::CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode)
 
 CLink::~CLink()
 {
-	printf("Link 삭제");
+	printf("Link 삭제\n");
 	closesocket(*mClientSocket);
 	delete mClientSocket;
 }
@@ -87,16 +87,18 @@ void CLink::SendnMine(const PacketKindEnum PacketKind, LPVOID packet)
 	switch (PacketKind)
 	{// char 동적할당 하기 싫어서 각case안에 중복되는 코드가 있다..
 	case PacketKindEnum::Transform:
-		printf("Transform 보내기");
+		printf("Transform 보내기\n");
 //		lpTr = (PacketTransform*)packet;
 		char sendTempTr[sendSizeTr];
 		wsBuf.buf = sendTempTr; wsBuf.len = sendSizeTr;
 		Sendn(wsBuf, packet);
+		break;
 	case PacketKindEnum::Message:
 //		lpM = (PacketMessage*)packet;
 		char sendTempM[sendSizeM];
 		wsBuf.buf = sendTempM; wsBuf.len = sendSizeM;
 		Sendn(wsBuf, packet);
+		break;
 	default:
 		break;
 	}

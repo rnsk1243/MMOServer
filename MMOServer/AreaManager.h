@@ -9,8 +9,8 @@ typedef AreaVector::iterator AreaVectorIt;
 
 class CAreaManager
 {
-	HANDLE hRemoveEvent;
-	HANDLE hBroadcastEvent;
+	//HANDLE hRemoveEvent;
+	//HANDLE hBroadcastEvent;
 	AreaVector mAreas;
 //	void PatrolErrorLinkWorkThread();
 public:

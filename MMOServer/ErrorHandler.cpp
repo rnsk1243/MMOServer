@@ -3,9 +3,13 @@
 #include"ConstValue.h"
 
 
-CErrorHandler::CErrorHandler() :
-	IsGabStart(false)
+CErrorHandler::CErrorHandler()
+	//mErrorLinkAmount(0)
 {
+	for (int i = 0; i < AreaAmount; i++)
+	{
+		mErrorLinkAmount[i] = 0;
+	}
 }
 
 using namespace std;
@@ -84,6 +88,21 @@ void CErrorHandler::MakeErrorFrame(ErrorLevel errorLV, ErrorCode code, std::vect
 	GetErrorCode(code, result);
 }
 
+void CErrorHandler::IncreaseErrorLink(int areaNumber)
+{
+	if (AreaAmount <= areaNumber)
+		return;
+
+	if (mErrorLinkAmount[areaNumber] >= 0)
+	{
+		++mErrorLinkAmount[areaNumber];
+	}
+	else
+	{
+		mErrorLinkAmount[areaNumber] = 0;
+	}
+}
+
 CErrorHandler* CErrorHandler::GetInstance()
 {
 	if (ErrorHandlerPtr == nullptr)
@@ -109,11 +128,32 @@ void CErrorHandler::TakeError(ErrorLevel errorLV, ErrorCode code, CLink* targetC
 		case ErrorCode::ErrorRecvn:
 		case ErrorCode::ErrorSendnMine:
 			targetClient->SetErrorState();
-			IsGabStart = true;
+			IncreaseErrorLink(targetClient->GetCurArea());
 			break;
 		default:
 			break;
 		}
 	}
 	Write(ErrorLogTxt.c_str(), errorLog);
+}
+
+
+void CErrorHandler::DecreaseErrorLink(int areaNumber)
+{
+	if (AreaAmount <= areaNumber)
+		return;
+
+	if (mErrorLinkAmount[areaNumber] > 0)
+	{
+		--mErrorLinkAmount[areaNumber];
+	}
+	else
+	{
+		mErrorLinkAmount[areaNumber] = 0;
+	}
+}
+
+bool CErrorHandler::IsErrorLinkRemoveStart(int areaNumber)
+{
+	return (mErrorLinkAmount[areaNumber] >= ErrorLinkLimitAmount);
 }

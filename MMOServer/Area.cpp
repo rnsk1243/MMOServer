@@ -17,7 +17,7 @@ void CArea::EraseClient(const int & clientPKnum)
 }
 
 CArea::CArea(std::string areaName, int areaNum):
-	mAreaName(areaName), mAreaNumber(areaNum), mAmountPeople(0)
+	mAreaName(areaName), mAreaNumber(areaNum), mAmountPeople(0), mErrorLinkAmount(0)
 {
 }
 
@@ -27,13 +27,20 @@ CArea::~CArea()
 
 void CArea::SearchEndRemoveErrorLink()
 {
+	printf("날 깨우다니 청소를 시작해 볼까...\n");
+	ScopeLock<CRITICALSECTION> CS(mCS);
 	LinkListIt linkListIterBegin = mClientInfos.begin();
-	for (; linkListIterBegin != mClientInfos.end(); ++linkListIterBegin)
+	for (; linkListIterBegin != mClientInfos.end();)
 	{
 		if ((*linkListIterBegin).get()->IsErrorClient() == true)
 		{
-			ScopeLock<CRITICALSECTION> CS(mCS);
 			linkListIterBegin = mClientInfos.erase(linkListIterBegin);
+			--mAmountPeople;
+			ErrorHandlerPtr->DecreaseErrorLink(mAreaNumber);
+		}
+		else
+		{
+			++linkListIterBegin;
 		}
 	}
 
@@ -42,12 +49,18 @@ void CArea::SearchEndRemoveErrorLink()
 bool CArea::PushClient(const LinkPtr & shared_client)
 {
 	mClientInfos.push_back(shared_client);
-	printf("%d 번 Area 들어옴", mAreaNumber);
+	printf("%d 번 Area 들어옴\n", mAreaNumber);
+	++mAmountPeople;
 	return true;
 }
 
 void CArea::Broadcast(const PacketKindEnum PacketKind, LPVOID packet)
 {
+	if (ErrorHandlerPtr->IsErrorLinkRemoveStart(mAreaNumber))
+	{
+		SearchEndRemoveErrorLink();
+	}
+
 	LinkListIt linkIterBegin = mClientInfos.begin();
 	for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
 	{
