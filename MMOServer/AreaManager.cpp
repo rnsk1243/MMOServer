@@ -70,7 +70,6 @@ void CAreaManager::Broadcast(LinkPtr link, const PacketKindEnum PacketKind, LPVO
 	//WaitForSingleObject(hRemoveEvent, INFINITE);
 	//ResetEvent(hBroadcastEvent);
 //	printf("//2222Åë°ú//\n");
-
 	int myArea = link.get()->GetCurArea();
 	mAreas[myArea].get()->Broadcast(PacketKind, packet);
 

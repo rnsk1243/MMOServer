@@ -19,6 +19,7 @@ private:
 	int mMyDistinguishCode;
 	void Sendn(WSABUF wsaBuf, LPVOID packet);
 	bool mIsErrorState;
+	MyTransform mCurMyTransform;
 public:
 	CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode);
 	~CLink();
@@ -31,6 +32,8 @@ public:
 	const int GetMyDistinguishCode();
 	void SetErrorState();
 	bool IsErrorClient();
+	void SetMyTransform(const MyTransform& tr);
+	const MyTransform& GetMyTransform();
 	//const std::string& GetMyName();
 };
 

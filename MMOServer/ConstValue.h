@@ -3,7 +3,6 @@
 #include<iostream>
 #include"EnumInfo.h"
 
-
 const int Port = 9000;
 const int RecvBufSize = 1024;
 const int MessageBufSize = 128;
@@ -13,6 +12,7 @@ const int timeKind = 6; // 시간 종류 갯수 (년, 월, 일, 시, 분, 초) 6개
 const int WrongValue = -1; // 잘 못된 값. 혹은 아직 초기화 되지 않은 값.
 const int StartDistinguishCode = 0; // 구별번호 시작 값
 const int ErrorLinkLimitAmount = 3; // Error가 발생한 Link를 몇개까지 쌓아 두었다가 제거시킬 것인지에 대한 값.
+
 
 const std::string ErrorLogTxt = "ErrorLog.txt";
 const std::string ErrorLV_Serious = "[심각]";
@@ -43,7 +43,10 @@ struct MyTransform
 	MyVector3 Scale;
 
 	MyTransform()
-	{}
+	{
+		Position.y = 1.0f;
+		Scale.x, Scale.y, Scale.z = 1.0f;
+	}
 
 	MyTransform(MyVector3 pos, MyVector3 rot, MyVector3 sca):
 		Position(pos), Rotation(rot), Scale(sca)
@@ -131,4 +134,3 @@ public:
 	const std::string SendDistinguishCode;
 };
 static RequestCollection* RequestCollectionPtr = RequestCollection::GetInstance();
-

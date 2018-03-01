@@ -32,6 +32,8 @@ CLink::CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode)
 	memset(&mClientAddr, 0, sizeof(SOCKADDR_IN));
 	mRecvWsaBuf.buf = mMessageBuf;
 	mRecvWsaBuf.len = RecvBufSize;
+	mCurMyTransform.Position.y = 1.0f;
+	mCurMyTransform.Scale.x = 1.0f; mCurMyTransform.Scale.y = 1.0f; mCurMyTransform.Scale.z = 1.0f;
 }
 
 CLink::~CLink()
@@ -149,6 +151,16 @@ void CLink::SetErrorState()
 bool CLink::IsErrorClient()
 {
 	return mIsErrorState;
+}
+
+void CLink::SetMyTransform(const MyTransform & tr)
+{
+	mCurMyTransform = tr;
+}
+
+const MyTransform & CLink::GetMyTransform()
+{
+	return mCurMyTransform;
 }
 
 //const std::string & CLink::GetMyName()

@@ -25,6 +25,7 @@ CCommandMap::~CCommandMap()
 
 void CCommandMap::Call(const std::string & funcName, CLink* targetClient)
 {
+	printf("요청 받은 내용 : %s\n", funcName.c_str());
 	MAP_FUNC::iterator iterBegin = mMapFunc.begin();
 	iterBegin = mMapFunc.find(funcName);
 	if (iterBegin != mMapFunc.end())
