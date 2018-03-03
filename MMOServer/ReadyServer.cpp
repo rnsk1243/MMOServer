@@ -107,6 +107,6 @@ int CReadyServer::GetDistinguishcode()
 {
 	int returnVal = mNextDistinguishCode;
 	IncreaseDisCode();
-	printf("구별번호 반환 : %d\n", returnVal);
+	//printf("구별번호 반환 : %d\n", returnVal);
 	return returnVal;
 }

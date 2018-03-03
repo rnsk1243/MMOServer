@@ -52,7 +52,7 @@ DWORD WorkThreadInfo::ThreadWork(LPVOID hCPObj)
 				//printf("보낼 Tr 종류 : %d\n", packetTr.PacketKind);
 				//printf("보낼 Tr Protocol : %d\n", packetTr.InfoProtocol);
 				//printf("보낼 Tr 구분 : %d\n", packetTr.DistinguishCode);
-				//linkPtr.get()->SetMyTransform(packetTr.Tr);
+				linkPtr.get()->SetMyTransform(packetTr.Tr);
 				areas->Broadcast(linkPtr, PacketKindEnum::Transform, &packetTr);
 				break;
 			case PacketKindEnum::Message:

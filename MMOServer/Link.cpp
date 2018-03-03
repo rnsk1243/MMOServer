@@ -10,7 +10,7 @@ void CLink::Sendn(WSABUF wsaBuf, LPVOID packet)
 	{
 		if (WSAGetLastError() == WSA_IO_PENDING)
 		{
-			printf("SendnMine PENDING...\n");
+			//printf("SendnMine PENDING...\n");
 		}
 		else
 		{
@@ -89,7 +89,7 @@ void CLink::SendnMine(const PacketKindEnum PacketKind, LPVOID packet)
 	switch (PacketKind)
 	{// char 동적할당 하기 싫어서 각case안에 중복되는 코드가 있다..
 	case PacketKindEnum::Transform:
-		printf("Transform 보내기\n");
+		//printf("Transform 보내기\n");
 //		lpTr = (PacketTransform*)packet;
 		char sendTempTr[sendSizeTr];
 		wsBuf.buf = sendTempTr; wsBuf.len = sendSizeTr;
@@ -116,7 +116,7 @@ void CLink::Recvn(DWORD flags)
 	{
 		if (WSAGetLastError() == WSA_IO_PENDING)
 		{
-			printf("Recvn PENDING...\n");
+			//printf("Recvn PENDING...\n");
 			
 		}
 		else

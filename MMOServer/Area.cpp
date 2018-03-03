@@ -52,7 +52,7 @@ void CArea::SendNewClientNotice(const LinkPtr & newClientPtr)
 {
 	int newClientDisCode = newClientPtr.get()->GetMyDistinguishCode();
 	PacketTransform newLinkTr(ProtocolInfo::NewLink, newClientDisCode, newClientPtr.get()->GetMyTransform());
-	printf("전입 신고 Position.y = %f\n", newClientPtr.get()->GetMyTransform().Position.y);
+	//printf("전입 신고 Position.y = %f\n", newClientPtr.get()->GetMyTransform().Position.y);
 	// 원래 있던 사람에게 "전입 신고 하기"
 	Broadcast(PacketKindEnum::Transform, &newLinkTr);
 	// 원래 있던 사람들이 현재 자신의 위치를 새로 들어온 사람에게 알려주기
@@ -79,7 +79,7 @@ bool CArea::PushClient(const LinkPtr & shared_client)
 
 void CArea::Broadcast(const PacketKindEnum PacketKind, LPVOID packet)
 {
-	if (ErrorHandlerPtr->IsErrorLinkRemoveStart(mAreaNumber))
+	if (ErrorHandlerPtr->IsErrorLinkRemoveStart(mAreaNumber)) // 에러난 Link를 제거할 개수가 기준을 초과했나?
 	{
 		SearchEndRemoveErrorLink();
 	}
