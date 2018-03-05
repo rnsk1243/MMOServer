@@ -15,6 +15,7 @@ void CCommandMap::SendMyDistinguishCode(CLink * targetClient)
 
 CCommandMap::CCommandMap()
 {
+	// command add
 	mMapFunc.insert(std::make_pair(RequestCollection::GetInstance()->SendDistinguishCode, &CCommandMap::SendMyDistinguishCode));
 }
 

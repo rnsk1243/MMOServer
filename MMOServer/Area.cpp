@@ -17,7 +17,7 @@ void CArea::EraseClient(const int & clientPKnum)
 }
 
 CArea::CArea(std::string areaName, int areaNum):
-	mAreaName(areaName), mAreaNumber(areaNum), mAmountPeople(0), mErrorLinkAmount(0)
+	mAreaName(areaName), mAreaNumber(areaNum), mAmountPeople(0), mErrorLinkAmount(0), mIsRemoveErrorLink(false)
 {
 }
 
@@ -29,6 +29,7 @@ void CArea::SearchEndRemoveErrorLink()
 {
 	printf("날 깨우다니 청소를 시작해 볼까...\n");
 	ScopeLock<CRITICALSECTION> CS(mCS);
+	mIsRemoveErrorLink = true;
 	LinkListIt linkListIterBegin = mClientInfos.begin();
 	for (; linkListIterBegin != mClientInfos.end();)
 	{
@@ -45,7 +46,7 @@ void CArea::SearchEndRemoveErrorLink()
 			++linkListIterBegin;
 		}
 	}
-
+	mIsRemoveErrorLink = false;
 }
 
 void CArea::SendNewClientNotice(const LinkPtr & newClientPtr)
@@ -83,17 +84,16 @@ void CArea::Broadcast(const PacketKindEnum PacketKind, LPVOID packet)
 	{
 		SearchEndRemoveErrorLink();
 	}
-
-	LinkListIt linkIterBegin = mClientInfos.begin();
-	for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
+	if (!mIsRemoveErrorLink)
 	{
-		//++i;
-		if ((*linkIterBegin).get() != nullptr)
+		LinkListIt linkIterBegin = mClientInfos.begin();
+		for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
 		{
-			(*linkIterBegin).get()->SendnMine(PacketKind, packet);
+			if ((*linkIterBegin) != nullptr)
+			{
+				(*linkIterBegin).get()->SendnMine(PacketKind, packet);
+			}
 		}
-
-		//printf("보낸 횟수 : %d", i);
 	}
 }
 

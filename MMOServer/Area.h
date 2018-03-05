@@ -14,6 +14,7 @@ class CArea
 	std::string mAreaName;
 	int mAmountPeople;
 	const int mAreaNumber;
+	bool mIsRemoveErrorLink;
 	void EraseClient(const int& clientPKnum);
 	int mErrorLinkAmount; // 에러난 link 개수.
 	void SearchEndRemoveErrorLink();
