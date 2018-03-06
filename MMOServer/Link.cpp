@@ -19,6 +19,7 @@ void CLink::Sendn(WSABUF wsaBuf, LPVOID packet)
 			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorSendnMine, this);
 		}
 	}
+	printf("진짜 삭제 전송2\n");
 	//printf("보낸 byte수 : %d \n", sendBytes);
 }
 
@@ -84,21 +85,24 @@ void CLink::SendnMine(const PacketKindEnum PacketKind, LPVOID packet)
 //	PacketTransform* lpTr = nullptr; PacketMessage* lpM = nullptr;
 	//DWORD sendBytes;
 	WSABUF wsBuf;
-	const int sendSizeTr = sizeof(PacketTransform);
-	const int sendSizeM = sizeof(PacketMessage);
 	switch (PacketKind)
 	{// char 동적할당 하기 싫어서 각case안에 중복되는 코드가 있다..
 	case PacketKindEnum::Transform:
 		//printf("Transform 보내기\n");
 //		lpTr = (PacketTransform*)packet;
-		char sendTempTr[sendSizeTr];
-		wsBuf.buf = sendTempTr; wsBuf.len = sendSizeTr;
+		char sendTempTr[SendSizeTransform];
+		wsBuf.buf = sendTempTr; wsBuf.len = SendSizeTransform;
 		Sendn(wsBuf, packet);
 		break;
 	case PacketKindEnum::Message:
 //		lpM = (PacketMessage*)packet;
-		char sendTempM[sendSizeM];
-		wsBuf.buf = sendTempM; wsBuf.len = sendSizeM;
+		char sendTempM[SendSizeMessage];
+		wsBuf.buf = sendTempM; wsBuf.len = SendSizeMessage;
+		Sendn(wsBuf, packet);
+		break;
+	case PacketKindEnum::DeleteObjEnum:
+		char sendTempDelete[SendSizeDeleteObj];
+		wsBuf.buf = sendTempDelete; wsBuf.len = SendSizeDeleteObj;
 		Sendn(wsBuf, packet);
 		break;
 	default:

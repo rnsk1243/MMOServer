@@ -2,6 +2,7 @@
 #include"RAII.h"
 #include"ErrorHandler.h"
 
+
 void CArea::EraseClient(const int & clientPKnum)
 {
 	LinkListIt linkIterBegin = mClientInfos.begin();
@@ -31,10 +32,16 @@ void CArea::SearchEndRemoveErrorLink()
 	ScopeLock<CRITICALSECTION> CS(mCS);
 	mIsRemoveErrorLink = true;
 	LinkListIt linkListIterBegin = mClientInfos.begin();
+	PacketDeleteObj deletePacket(ProtocolInfo::DeleteObj, WrongValue);
+	int index = 0;
 	for (; linkListIterBegin != mClientInfos.end();)
 	{
 		if ((*linkListIterBegin).get()->IsErrorClient() == true)
 		{
+			if (index >= SendEraseObjArraySize)
+			{ break; }
+			deletePacket.EraseObjDiscodeArray[index] = (*linkListIterBegin).get()->GetMyDistinguishCode(); // 삭제할 구별코드 추가
+			++index;
 			// erase하면 반환값으로 다음 반복자가 반환됨. 그러므로 for문 돌때마다 ++iterator할 필요없음
 			// 다만 erase를 하지 않을 경우(else문) 다음 반복자로 넘어가도록 해준다.
 			linkListIterBegin = mClientInfos.erase(linkListIterBegin);
@@ -46,7 +53,7 @@ void CArea::SearchEndRemoveErrorLink()
 			++linkListIterBegin;
 		}
 	}
-	mIsRemoveErrorLink = false;
+	SendDeleteCommand(&deletePacket); // 삭제 전송
 }
 
 void CArea::SendNewClientNotice(const LinkPtr & newClientPtr)
@@ -63,10 +70,19 @@ void CArea::SendNewClientNotice(const LinkPtr & newClientPtr)
 		CLink* oldLinkPtr = (*linkIterBegin).get();
 		if (oldLinkPtr != nullptr)
 		{
+			printf("생성 위치 : %d", oldLinkPtr->GetMyTransform().Position.x);
 			PacketTransform oldLinkTr(ProtocolInfo::NewLink, oldLinkPtr->GetMyDistinguishCode(), oldLinkPtr->GetMyTransform());
 			newClientPtr.get()->SendnMine(PacketKindEnum::Transform, &oldLinkTr);
 		}
 	}
+}
+
+void CArea::SendDeleteCommand(LPVOID packet)
+{
+	printf("삭제 전송 시작\n");
+	mIsRemoveErrorLink = false;
+	Broadcast(PacketKindEnum::DeleteObjEnum, packet);
+	printf("삭제 전송 완료\n");
 }
 
 bool CArea::PushClient(const LinkPtr & shared_client)
@@ -84,7 +100,7 @@ void CArea::Broadcast(const PacketKindEnum PacketKind, LPVOID packet)
 	{
 		SearchEndRemoveErrorLink();
 	}
-	if (!mIsRemoveErrorLink)
+	if (!mIsRemoveErrorLink) // IsErrorLinkRemoveStart 함수가 호출 중이 아니면.
 	{
 		LinkListIt linkIterBegin = mClientInfos.begin();
 		for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
@@ -92,6 +108,7 @@ void CArea::Broadcast(const PacketKindEnum PacketKind, LPVOID packet)
 			if ((*linkIterBegin) != nullptr)
 			{
 				(*linkIterBegin).get()->SendnMine(PacketKind, packet);
+				printf("진짜 삭제 전송1\n");
 			}
 		}
 	}

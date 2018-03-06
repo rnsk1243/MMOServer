@@ -19,6 +19,7 @@ class CArea
 	int mErrorLinkAmount; // 에러난 link 개수.
 	void SearchEndRemoveErrorLink();
 	void SendNewClientNotice(const LinkPtr & newClientPtr);
+	void SendDeleteCommand(LPVOID packet);
 	//void Removeclient(LinkListIt)
 public:
 	CArea(const CArea&) = delete;
