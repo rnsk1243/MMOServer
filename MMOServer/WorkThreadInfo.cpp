@@ -35,7 +35,7 @@ DWORD WorkThreadInfo::ThreadWork(LPVOID hCPObj)
 		}
 		if (receiveBytes == 0)
 		{
-			printf("Error - receiveBytes == 0\n");
+			//printf("Error - receiveBytes == 0\n");
 			ErrorHandlerPtr->TakeError(ErrorLevel::Normal, ErrorCode::ErrorGetQueuedCompletionStatusReceiveByteZero, linkPtr.get());
 			continue;
 		}

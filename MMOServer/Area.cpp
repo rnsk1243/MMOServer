@@ -54,6 +54,7 @@ void CArea::SearchEndRemoveErrorLink()
 		}
 	}
 	SendDeleteCommand(&deletePacket); // 삭제 전송
+	mIsRemoveErrorLink = false;
 }
 
 void CArea::SendNewClientNotice(const LinkPtr & newClientPtr)
@@ -70,20 +71,28 @@ void CArea::SendNewClientNotice(const LinkPtr & newClientPtr)
 		CLink* oldLinkPtr = (*linkIterBegin).get();
 		if (oldLinkPtr != nullptr)
 		{
-			printf("생성 위치 : %d", oldLinkPtr->GetMyTransform().Position.x);
+			//printf("생성 위치 : %d", oldLinkPtr->GetMyTransform().Position.x);
 			PacketTransform oldLinkTr(ProtocolInfo::NewLink, oldLinkPtr->GetMyDistinguishCode(), oldLinkPtr->GetMyTransform());
 			newClientPtr.get()->SendnMine(PacketKindEnum::Transform, &oldLinkTr);
 		}
 	}
 }
 
+//private//
 void CArea::SendDeleteCommand(LPVOID packet)
 {
-	printf("삭제 전송 시작\n");
-	mIsRemoveErrorLink = false;
-	Broadcast(PacketKindEnum::DeleteObjEnum, packet);
-	printf("삭제 전송 완료\n");
+	//mIsRemoveErrorLink = false;
+	//Broadcast(PacketKindEnum::DeleteObjEnum, packet);
+	LinkListIt linkIterBegin = mClientInfos.begin();
+	for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
+	{
+		if ((*linkIterBegin) != nullptr)
+		{
+			(*linkIterBegin).get()->SendnMine(PacketKindEnum::DeleteObjEnum, packet);
+		}
+	}
 }
+//////--
 
 bool CArea::PushClient(const LinkPtr & shared_client)
 {
@@ -108,7 +117,6 @@ void CArea::Broadcast(const PacketKindEnum PacketKind, LPVOID packet)
 			if ((*linkIterBegin) != nullptr)
 			{
 				(*linkIterBegin).get()->SendnMine(PacketKind, packet);
-				printf("진짜 삭제 전송1\n");
 			}
 		}
 	}

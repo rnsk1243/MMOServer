@@ -9,7 +9,6 @@
   CommandMap.cpp
   AreaManager.cpp
   Area.cpp
-e:\mysoloproject\iocp\mmoserver\mmoserver\mmoserver\area.cpp(73): warning C4477: 'printf' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'double'입니다.
   코드를 생성하고 있습니다...
   MMOServer.vcxproj -> E:\MySoloProject\IOCP\MMOServer\MMOServer\x64\Debug\MMOServer.exe
   MMOServer.vcxproj -> E:\MySoloProject\IOCP\MMOServer\MMOServer\x64\Debug\MMOServer.pdb (Full PDB)

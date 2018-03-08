@@ -19,7 +19,6 @@ void CLink::Sendn(WSABUF wsaBuf, LPVOID packet)
 			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorSendnMine, this);
 		}
 	}
-	printf("진짜 삭제 전송2\n");
 	//printf("보낸 byte수 : %d \n", sendBytes);
 }
 

@@ -12,7 +12,7 @@ const int timeKind = 6; // 시간 종류 갯수 (년, 월, 일, 시, 분, 초) 6개
 const int WrongValue = -1; // 잘 못된 값. 혹은 아직 초기화 되지 않은 값.
 const int StartDistinguishCode = 0; // 구별번호 시작 값
 const int ErrorLinkLimitAmount = 3; // Error가 발생한 Link를 몇개까지 쌓아 두었다가 제거시킬 것인지에 대한 값.
-const int SendEraseObjArraySize = 10; // 클라이언트에게 지우고자 하는 구별번호 보낼 수 있는 배열 크기 index 0~9 까지
+const int SendEraseObjArraySize = ErrorLinkLimitAmount; // 클라이언트에게 지우고자 하는 구별번호 보낼 수 있는 배열 크기 index 0~ErrorLinkLimitAmount 까지
 
 const std::string ErrorLogTxt = "ErrorLog.txt";
 const std::string ErrorLV_Serious = "[심각]";
