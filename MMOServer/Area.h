@@ -19,14 +19,15 @@ class CArea
 	int mErrorLinkAmount; // 에러난 link 개수.
 	void SearchEndRemoveErrorLink();
 	void SendNewClientNotice(const LinkPtr & newClientPtr);
-	void SendDeleteCommand(LPVOID packet);
 	//void Removeclient(LinkListIt)
 public:
 	CArea(const CArea&) = delete;
 	CArea& operator=(const CArea&) = delete;
 	CArea(std::string areaName, int areaNum);
 	~CArea();
+	void SendDeleteCommand(const LinkPtr & linkPtr);
 	bool PushClient(const LinkPtr& shared_client);
+	const LinkPtr GetLinkPtr(int disCode);
 	void Broadcast(const PacketKindEnum PacketKind, LPVOID packet);
 };
 

@@ -18,7 +18,9 @@ public:
 	~CAreaManager();
 	CAreaManager& operator=(const CAreaManager&) = delete;
 	CAreaManager(const CAreaManager&) = delete;
-	void EnterArea(int areaNumber, LinkPtr linkPtr);
+	bool EnterArea(int areaNumber, const LinkPtr & linkPtr);
+	bool MoveArea(int areaNumber, const LinkPtr & linkPtr);
+	const LinkPtr GetLinkPtr(int areaNumber, int disCode);
 	//void EraseClient(LinkPtr linkPtr);
 	void Broadcast(LinkPtr link, const PacketKindEnum PacketKind, LPVOID packet);
 };

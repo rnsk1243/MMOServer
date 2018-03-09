@@ -1,14 +1,2 @@
-﻿  WorkThreadInfo.cpp
-  Util.cpp
-  ReadyServer.cpp
-  main.cpp
-  Link.cpp
-  ErrorHandler.cpp
-  ErrorCode.cpp
-  ConstValue.cpp
-  CommandMap.cpp
-  AreaManager.cpp
-  Area.cpp
-  코드를 생성하고 있습니다...
-  MMOServer.vcxproj -> E:\MySoloProject\IOCP\MMOServer\MMOServer\x64\Debug\MMOServer.exe
+﻿  MMOServer.vcxproj -> E:\MySoloProject\IOCP\MMOServer\MMOServer\x64\Debug\MMOServer.exe
   MMOServer.vcxproj -> E:\MySoloProject\IOCP\MMOServer\MMOServer\x64\Debug\MMOServer.pdb (Full PDB)

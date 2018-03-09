@@ -34,6 +34,7 @@ public:
 	bool IsErrorClient();
 	void SetMyTransform(const MyTransform& tr);
 	const MyTransform& GetMyTransform();
+	void UpdateMyAreaNumber(int newAreaNumber);
 	//const std::string& GetMyName();
 };
 

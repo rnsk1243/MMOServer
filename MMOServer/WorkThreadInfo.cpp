@@ -60,7 +60,8 @@ DWORD WorkThreadInfo::ThreadWork(LPVOID hCPObj)
 				//printf("받은 message : %s\n", packetM.Message);
 				if (packetM.InfoProtocol == ProtocolInfo::Request)
 				{
-					commandMap.Call(packetM.Message, linkPtr.get());
+					//printf("IOCP 완료포트 주의 linkPtr Count = %d\n", linkPtr.use_count());
+					commandMap.Call(packetM.Message, linkPtr, areas, &packetM);
 					break;
 				}
 				if (packetM.InfoProtocol == ProtocolInfo::Chat)

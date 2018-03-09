@@ -6,10 +6,10 @@
 CErrorHandler::CErrorHandler()
 	//mErrorLinkAmount(0)
 {
-	for (int i = 0; i < AreaAmount; i++)
-	{
-		mErrorLinkAmount[i] = 0;
-	}
+	//for (int i = 0; i < AreaAmount; i++)
+	//{
+	//	mErrorLinkAmount[i] = 0;
+	//}
 }
 
 using namespace std;
@@ -88,20 +88,20 @@ void CErrorHandler::MakeErrorFrame(ErrorLevel errorLV, ErrorCode code, std::vect
 	GetErrorCode(code, result);
 }
 
-void CErrorHandler::IncreaseErrorLink(int areaNumber)
-{
-	if (AreaAmount <= areaNumber)
-		return;
-
-	if (mErrorLinkAmount[areaNumber] >= 0)
-	{
-		++mErrorLinkAmount[areaNumber];
-	}
-	else
-	{
-		mErrorLinkAmount[areaNumber] = 0;
-	}
-}
+//void CErrorHandler::IncreaseErrorLink(int areaNumber)
+//{
+//	if (AreaAmount <= areaNumber)
+//		return;
+//
+//	if (mErrorLinkAmount[areaNumber] >= 0)
+//	{
+//		++mErrorLinkAmount[areaNumber];
+//	}
+//	else
+//	{
+//		mErrorLinkAmount[areaNumber] = 0;
+//	}
+//}
 
 CErrorHandler* CErrorHandler::GetInstance()
 {
@@ -128,7 +128,8 @@ void CErrorHandler::TakeError(ErrorLevel errorLV, ErrorCode code, CLink* targetC
 		case ErrorCode::ErrorRecvn:
 		case ErrorCode::ErrorSendnMine:
 			targetClient->SetErrorState();
-			IncreaseErrorLink(targetClient->GetCurArea());
+			mDeletePlayerDisCodeQueue[targetClient->GetCurArea()].push(targetClient->GetMyDistinguishCode());
+			//IncreaseErrorLink(targetClient->GetCurArea());
 			break;
 		default:
 			break;
@@ -138,22 +139,42 @@ void CErrorHandler::TakeError(ErrorLevel errorLV, ErrorCode code, CLink* targetC
 }
 
 
-void CErrorHandler::DecreaseErrorLink(int areaNumber)
-{
-	if (AreaAmount <= areaNumber)
-		return;
-
-	if (mErrorLinkAmount[areaNumber] > 0)
-	{
-		--mErrorLinkAmount[areaNumber];
-	}
-	else
-	{
-		mErrorLinkAmount[areaNumber] = 0;
-	}
-}
+//void CErrorHandler::DecreaseErrorLink(int areaNumber)
+//{
+//	if (AreaAmount <= areaNumber)
+//		return;
+//
+//	if (mErrorLinkAmount[areaNumber] > 0)
+//	{
+//		--mErrorLinkAmount[areaNumber];
+//	}
+//	else
+//	{
+//		mErrorLinkAmount[areaNumber] = 0;
+//	}
+//}
 
 bool CErrorHandler::IsErrorLinkRemoveStart(int areaNumber)
 {
-	return (mErrorLinkAmount[areaNumber] >= ErrorLinkLimitAmount);
+	//printf("mDeletePlayerDisCodeQueue[ %d ].size() = %d\n", areaNumber, mDeletePlayerDisCodeQueue[areaNumber].size());
+	return (mDeletePlayerDisCodeQueue[areaNumber].size() >= ErrorLinkLimitAmount);
+}
+
+int CErrorHandler::GetDeletePlayerDisCode(int areaNumber)
+{
+	if (mDeletePlayerDisCodeQueue[areaNumber].empty() == false)
+	{
+		int disCode = mDeletePlayerDisCodeQueue[areaNumber].front();
+		mDeletePlayerDisCodeQueue[areaNumber].pop();
+		return disCode;
+	}
+	else
+	{
+		return WrongValue;
+	}
+}
+
+void CErrorHandler::PushDeletePlayerDisCode(int areaNumber, int targetDisCode)
+{
+	mDeletePlayerDisCodeQueue[areaNumber].push(targetDisCode);
 }

@@ -166,6 +166,11 @@ const MyTransform & CLink::GetMyTransform()
 	return mCurMyTransform;
 }
 
+void CLink::UpdateMyAreaNumber(int newAreaNumber)
+{
+	mCurAreaNumber = newAreaNumber;
+}
+
 //const std::string & CLink::GetMyName()
 //{
 //	return "임시이름";

@@ -46,12 +46,12 @@ public:
 	void lock()
 	{
 		EnterCriticalSection(&mCS);
-		std::cout << "critical lock 완료" << std::endl;
+		//std::cout << "critical lock 완료" << std::endl;
 	}
 	void unlock()
 	{
 		LeaveCriticalSection(&mCS);
-		std::cout << "critical unlock 완료" << std::endl;
+		//std::cout << "critical unlock 완료" << std::endl;
 	}
 };
 

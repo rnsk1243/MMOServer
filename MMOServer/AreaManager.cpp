@@ -53,9 +53,25 @@ CAreaManager::~CAreaManager()
 	//CloseHandle(hBroadcastEvent);
 }
 
-void CAreaManager::EnterArea(int areaNumber, LinkPtr linkPtr)
+bool CAreaManager::EnterArea(int areaNumber, const LinkPtr & linkPtr)
 {
-	mAreas[areaNumber].get()->PushClient(linkPtr);
+	return mAreas[areaNumber].get()->PushClient(linkPtr);
+}
+
+bool CAreaManager::MoveArea(int areaNumber, const LinkPtr & linkPtr)
+{
+	if (linkPtr == nullptr)
+		return false;
+	int oldAreaNumber = linkPtr.get()->GetCurArea();
+	mAreas[oldAreaNumber].get()->SendDeleteCommand(linkPtr); // 클라이언트들에게 지우라 명령
+	ErrorHandlerPtr->PushDeletePlayerDisCode(oldAreaNumber, linkPtr.get()->GetMyDistinguishCode()); // 서버 컨테이너에 들은거 지우기 등록
+	bool result = EnterArea(areaNumber, linkPtr);
+	return result;
+}
+
+const LinkPtr CAreaManager::GetLinkPtr(int areaNumber, int disCode)
+{
+	return mAreas[areaNumber].get()->GetLinkPtr(disCode);
 }
 
 //void CAreaManager::EraseClient(LinkPtr linkPtr)
