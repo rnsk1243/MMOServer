@@ -8,18 +8,18 @@ const int RecvBufSize = 1024;
 const int MessageBufSize = 128;
 const int StartCurArea = 0;
 const int AreaAmount = 3;
-const int timeKind = 6; // ½Ã°£ Á¾·ù °¹¼ö (³â, ¿ù, ÀÏ, ½Ã, ºĞ, ÃÊ) 6°³
-const int WrongValue = -1; // Àß ¸øµÈ °ª. È¤Àº ¾ÆÁ÷ ÃÊ±âÈ­ µÇÁö ¾ÊÀº °ª.
-const int StartDistinguishCode = 0; // ±¸º°¹øÈ£ ½ÃÀÛ °ª
-const int ErrorLinkLimitAmount = 1; // Error°¡ ¹ß»ıÇÑ Link¸¦ ¸î°³±îÁö ½×¾Æ µÎ¾ú´Ù°¡ Á¦°Å½ÃÅ³ °ÍÀÎÁö¿¡ ´ëÇÑ °ª. (Å¬¶óÀÌ¾ğÆ® SendEraseObjArraySize°ª°ú ÀÏÄ¡ ½ÃÅ³ °Í.)
-const int SendEraseObjArraySize = ErrorLinkLimitAmount; // Å¬¶óÀÌ¾ğÆ®¿¡°Ô Áö¿ì°íÀÚ ÇÏ´Â ±¸º°¹øÈ£ º¸³¾ ¼ö ÀÖ´Â ¹è¿­ Å©±â index 0~ErrorLinkLimitAmount ±îÁö
-const int MoveAreaSuccessValue = 1; // areaÀÌµ¿ ¼º°ø½Ã Å¬¶óÀÌ¾ğÆ®¿¡°Ô º¸³»´Â °ª
+const int timeKind = 6; //ŠÔí—Ş”(”NAŒA“úAA•ªA‰)6ŒÂ
+const int WrongValue = -1; //ŠÔˆá‚Á‚½’lB‚ ‚é‚¢‚ÍA‚Ü‚¾‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢’lB
+const int StartDistinguishCode = 0; //‹æ•Ê”Ô†ŠJn’l
+const int ErrorLinkLimitAmount = 1; //Error‚ª”­¶‚µ‚½Link‚ğ‚¢‚­‚Â‚Ü‚ÅÏ‚ñ‚Å‚¨‚¢‚Äœ‹‚³‚¹‚é‚©‚É‚Â‚¢‚½’l’i(ƒNƒ‰ƒCƒAƒ“ƒgSendEraseObjArraySize’l‚Æˆê’v‚³‚¹‚é‚Â‚à‚èB)
+const int SendEraseObjArraySize = ErrorLinkLimitAmount; //ƒNƒ‰ƒCƒAƒ“ƒg‚É•‰‚í‚¹‚é‚Æ‚¢‚¤‹æ•Ê”Ô†‘—‚é‚±‚Æ‚ª‚Å‚«‚é”z—ñ‚Ì‘å‚«‚³index 0~ErrorLinkLimitAmount‚Ü‚Å
+const int MoveAreaSuccessValue = 1; //area‚ÌˆÚ“®¬Œ÷AƒNƒ‰ƒCƒAƒ“ƒg‚É‘—‚é”ï—p
 
 const std::string ErrorLogTxt = "ErrorLog.txt";
-const std::string ErrorLV_Serious = "[½É°¢]";
-const std::string ErrorLV_Normal = "[º¸Åë]";
-const std::string ErrorLV_Low = "[³·À½]";
-const std::string ErrorLV_UnKnown = "[Á¤ÀÇµÇÁö ¾ÊÀº ·¹º§]";
+const std::string ErrorLV_Serious = "[[]";
+const std::string ErrorLV_Normal = "[•’Ê]";
+const std::string ErrorLV_Low = "[’á‚¢]";
+const std::string ErrorLV_UnKnown = "[’è‹`‚³‚ê‚Ä‚¢‚È‚¢ƒŒƒxƒ‹]";
 
 
 
@@ -95,7 +95,7 @@ struct PacketTransform // 48byte
 	MyTransform Tr; // 36byte
 
 	PacketTransform():PacketKind(PacketKindEnum::Transform),
-		InfoProtocol(WrongValue),DistinguishCode(WrongValue) // ÃÊ±âÈ­ µÇÁö ¾ÊÀº °Í¿¡´Â Àß ¸øµÈ °ªÀ» ³Ö¾î Ç¥½ÃÇÔ.
+		InfoProtocol(WrongValue),DistinguishCode(WrongValue) //‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚ÍŠÔˆá‚Á‚½’l‚ğ“ü‚ê‚Ä•\¦‚·‚éB
 	{}
 	PacketTransform(int infoProtocol, int distinguishCode, MyTransform tr):PacketKind(PacketKindEnum::Transform),
 		InfoProtocol(infoProtocol), DistinguishCode(distinguishCode), Tr(tr)
@@ -111,7 +111,7 @@ struct PacketMessage // (16 + ChatBufSize) byte
 	char Message[MessageBufSize]; // ChatBufSize byte
 
 	PacketMessage():PacketKind(PacketKindEnum::Message),
-		InfoProtocol(WrongValue), DistinguishCode(WrongValue), RequestVal(WrongValue) // ÃÊ±âÈ­ µÇÁö ¾ÊÀº °Í¿¡´Â Àß ¸øµÈ °ªÀ» ³Ö¾î Ç¥½ÃÇÔ.
+		InfoProtocol(WrongValue), DistinguishCode(WrongValue), RequestVal(WrongValue) //‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚ÍŠÔˆá‚Á‚½’l‚ğ“ü‚ê‚Ä•\¦‚·‚éB
 	{}
 
 	PacketMessage(int infoProtocol, int distinguishCode, const char* message):PacketKind(PacketKindEnum::Message),
@@ -129,7 +129,7 @@ struct PacketDeleteObj // ((4*3) + (4 * SendEraseObjArraySize)) byte // 52
 	int PacketKind;
 	int InfoProtocol;
 	int DistinguishCode;
-	int EraseObjDiscodeArray[SendEraseObjArraySize]; // »èÁ¦ÇÒ ¿ÀºêÁ§Æ® ±¸º°¹øÈ£
+	int EraseObjDiscodeArray[SendEraseObjArraySize]; //íœ‚·‚éƒIƒuƒWƒFƒNƒg‹æ•Ê”Ô†
 	
 	PacketDeleteObj():PacketKind(PacketKindEnum::DeleteObjEnum),
 		InfoProtocol(WrongValue), DistinguishCode(WrongValue)

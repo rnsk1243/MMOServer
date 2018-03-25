@@ -14,16 +14,16 @@ WorkThreadInfo::~WorkThreadInfo()
 
 DWORD WorkThreadInfo::ThreadWork(LPVOID hCPObj)
 {
-	HANDLE CPObj = *((HANDLE*)hCPObj);	// ¿Ï·á Æ÷Æ® ¿ÀºêÁ§Æ®
-	DWORD receiveBytes = 0;				// ¹Ş´Â ¹ÙÀÌÆ® Å©±â
-	LinkPtr linkPtr = nullptr;			// recv¿Ï·áµÈ link
-	CAreaManager* areas = nullptr;		// area Á¤º¸
-	CCommandMap commandMap;				// ¸í·ÉÀ» ´ã°íÀÖ´Â Map
-	int packetKind = WrongValue;		// ¾î¶² ÆĞÅ¶À» ¹Ş¾Ò´ÂÁö ´ãÀ» º¯¼ö
-	PacketTransform packetTr;			// ¹ŞÀº Á¤º¸¸¦ µ¤¾î¾ºÀ» Trº¯¼ö.
+	HANDLE CPObj = *((HANDLE*)hCPObj);	//Š®—¹ƒ|[ƒgƒIƒuƒWƒFƒNƒg
+	DWORD receiveBytes = 0;				//‚³‚ê‚éƒoƒCƒg‚Ì‘å‚«‚³
+	LinkPtr linkPtr = nullptr;			 //recvŠ®—¹‚³‚ê‚½link
+	CAreaManager* areas = nullptr;		 //areaî•ñ
+	CCommandMap commandMap;				 //–½—ß‚ğ·‚è‚ñ‚Å‚¢‚éMap
+	int packetKind = WrongValue;		//‚ ‚éƒpƒPƒbƒg‚ğó‚¯æ‚Á‚½‚©‚Ç‚¤‚©•»‚ğ•Ï”
+	PacketTransform packetTr;			//‚ğó‚¯‚½î•ñ‚ğƒhƒvƒIƒXƒBƒEƒ‹Tr•Ï”B
 	PacketMessage packetM;
-	const int recvSizeTr = sizeof(PacketTransform); // Transform ÆĞÅ¶ Å©±â
-	const int recvSizeM = sizeof(PacketMessage);	// Message ÆĞÅ¶ Å©±â
+	const int recvSizeTr = sizeof(PacketTransform); //TransformƒpƒPƒbƒg‚Ì‘å‚«‚³
+	const int recvSizeM = sizeof(PacketMessage);	 //MessageƒpƒPƒbƒg‚Ì‘å‚«‚³
 
 	while (true)
 	{
@@ -42,25 +42,25 @@ DWORD WorkThreadInfo::ThreadWork(LPVOID hCPObj)
 		else
 		{
 			memcpy_s(&packetKind, 4, linkPtr.get()->GetRecvBuf().buf, 4);
-			//printf("¹ŞÀº »çÀÌÁî : %d\n", receiveBytes);
-			//printf("¹ŞÀº ÆĞÅ¶ Á¾·ù : %d\n", packetKind);
-			// µğ½Ã¸®¾ó ÇÏ±â
+			//printf("ó‚¯‚½ƒTƒCƒY:%d\n"AreceiveBytes);
+			//printf("ó‚¯‚½ƒpƒPƒbƒg‚Ìí—Ş:%d\n"ApacketKind);
+			//AƒfƒB[EƒV[ƒŠƒAƒ‹‚·‚é
 			switch (packetKind)
 			{
 			case PacketKindEnum::Transform:
 				memcpy_s(&packetTr, recvSizeTr, linkPtr.get()->GetRecvBuf().buf, recvSizeTr);
-				//printf("º¸³¾ Tr Á¾·ù : %d\n", packetTr.PacketKind);
-				//printf("º¸³¾ Tr Protocol : %d\n", packetTr.InfoProtocol);
-				//printf("º¸³¾ Tr ±¸ºĞ : %d\n", packetTr.DistinguishCode);
+				//printf("‘—‚éTrí—Ş:%d\n"ApacketTr.PacketKind);
+				//printf("‘—‚éTr Protocol:%d\n"ApacketTr.InfoProtocol);
+				//printf("‘—‚éTr‹æ•ª:%d\n"ApacketTr.DistinguishCode);
 				linkPtr.get()->SetMyTransform(packetTr.Tr);
 				areas->Broadcast(linkPtr, PacketKindEnum::Transform, &packetTr);
 				break;
 			case PacketKindEnum::Message:
 				memcpy_s(&packetM, recvSizeM, linkPtr.get()->GetRecvBuf().buf, recvSizeM);
-				//printf("¹ŞÀº message : %s\n", packetM.Message);
+				//printf("ó‚¯‚½message:%s\n"ApacketM.Message);
 				if (packetM.InfoProtocol == ProtocolInfo::Request)
 				{
-					//printf("IOCP ¿Ï·áÆ÷Æ® ÁÖÀÇ linkPtr Count = %d\n", linkPtr.use_count());
+					//printf("IOCPŠ®—¹ƒ|[ƒgå‹`linkPtr Count=%d\n"AlinkPtr.use_count());
 					commandMap.Call(packetM.Message, linkPtr, areas, &packetM);
 					break;
 				}

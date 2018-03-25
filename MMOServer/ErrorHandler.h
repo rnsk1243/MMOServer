@@ -17,9 +17,9 @@ class CErrorHandler
 	void GetErrorCode(ErrorCode code, std::vector<std::string>& result);
 	void GetErrorClientInfo(CLink* client, std::vector<std::string>& result);
 	void MakeErrorFrame(ErrorLevel errorLV, ErrorCode code, std::vector<std::string> & result);
-	//int mErrorLinkAmount[AreaAmount]; // 각 area마다 ErrorLink개수 (index가 area번호)
+	//int mErrorLinkAmount[AreaAmount]; //둫area궟궴궸ErrorLink릶(index궕area붥뜂)
 	//void IncreaseErrorLink(int areaNumber);
-	IntQueue mDeletePlayerDisCodeQueue[AreaAmount]; // 각 area마다 삭제해야할 구별번호 담음 (index가 area번호)
+	IntQueue mDeletePlayerDisCodeQueue[AreaAmount]; //둫area궟궴궸랁룣궢궶궚귢궽궶귞궶궋뗦빶붥뜂맰귟븊궚(index궕area붥뜂)
 public:
 	static CErrorHandler* GetInstance();
 	~CErrorHandler();

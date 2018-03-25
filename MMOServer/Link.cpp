@@ -15,11 +15,11 @@ void CLink::Sendn(WSABUF wsaBuf, LPVOID packet)
 		else
 		{
 			printf("Error - Fail WSASend(error_code : %d)\n", WSAGetLastError());
-			// ¿¹¿ÜÃ³¸® ÇÊ¿ä.
+			//—áŠOˆ—‚ª•K—vB
 			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorSendnMine, this);
 		}
 	}
-	//printf("º¸³½ byte¼ö : %d \n", sendBytes);
+	//printf("‘—‚Á‚½byte”:%d\n"AsendBytes);
 }
 
 CLink::CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode)
@@ -38,7 +38,7 @@ CLink::CLink(SOCKET* clientSocket, int curAreaNumber, int distinguishcode)
 
 CLink::~CLink()
 {
-	printf("Link »èÁ¦\n");
+	printf("Linkíœ\n");
 	closesocket(*mClientSocket);
 	delete mClientSocket;
 }
@@ -54,7 +54,7 @@ SOCKET * CLink::GetClientSocket()
 //	WSABUF wsBuf;
 //	const int sendSize = sizeof(Packet);
 //	//printf("Packet Size = %d\n", sendSize);
-//	printf("º¸³»´Â ±¸º° ¹øÈ£ = %d\n", packet.RequestVal);
+// printf("‘—‚Á‚½‹æ•Ê”Ô†=%d\n"Apacket.RequestVal);
 //	char sendTemp[sendSize];
 //	wsBuf.buf = sendTemp; wsBuf.len = sendSize;
 //
@@ -68,12 +68,12 @@ SOCKET * CLink::GetClientSocket()
 //		else
 //		{
 //			printf("Error - Fail WSASend(error_code : %d)\n", WSAGetLastError());
-//			// ¿¹¿ÜÃ³¸® ÇÊ¿ä.
+//			  //—áŠOˆ—‚ª•K—vB
 //			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorSendnMine, this);
 //			return false;
 //		}
 //	}
-//	//printf("º¸³½ byte¼ö : %d \n", sendBytes);
+//	//printf("‘—‚Á‚½byte”:%d\n"AsendBytes);
 //	return true;
 //}
 
@@ -85,9 +85,9 @@ void CLink::SendnMine(const PacketKindEnum PacketKind, LPVOID packet)
 	//DWORD sendBytes;
 	WSABUF wsBuf;
 	switch (PacketKind)
-	{// char µ¿ÀûÇÒ´ç ÇÏ±â ½È¾î¼­ °¢case¾È¿¡ Áßº¹µÇ´Â ÄÚµå°¡ ÀÖ´Ù..
+	{//char“®“IŠ„‚èU‚é‚±‚ÆŒ™‚¢‚ÅŠecase‚Ì’†‚Éd•¡‚³‚ê‚éƒR[ƒh‚ª‚ ‚éB
 	case PacketKindEnum::Transform:
-		//printf("Transform º¸³»±â\n");
+		//printf("Transform‚ð‘—‚é\n");
 //		lpTr = (PacketTransform*)packet;
 		char sendTempTr[SendSizeTransform];
 		wsBuf.buf = sendTempTr; wsBuf.len = SendSizeTransform;
@@ -125,7 +125,7 @@ void CLink::Recvn(DWORD flags)
 		else
 		{
 			printf("Error - Fail WSARecv(error_code : %d)\n", WSAGetLastError());
-			// ¿¹¿ÜÃ³¸® ÇÊ¿ä.
+			//—áŠOˆ—‚ª•K—vB
 			ErrorHandlerPtr->TakeError(ErrorLevel::Low, ErrorCode::ErrorRecvn, this);
 		}
 	}
@@ -173,5 +173,5 @@ void CLink::UpdateMyAreaNumber(int newAreaNumber)
 
 //const std::string & CLink::GetMyName()
 //{
-//	return "ÀÓ½ÃÀÌ¸§";
+// return"—ÕŽž‚Ì–¼‘O";
 //}

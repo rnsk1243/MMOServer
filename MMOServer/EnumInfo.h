@@ -6,7 +6,7 @@ enum ProtocolInfo
 	Request,
 	Tr,
 	Chat,
-	NewLink, // Area¿¡ µé¾î¿Â Link(»õ·Î µé¾î¿Â »ç¶÷ ÀÔÀå¿¡¼­´Â ±âÁ¸¿¡ ÀÖ´ø »ç¶÷µéÀ» »õ·Î µé¾î¿Â »ç¶÷À¸·Î º»´Ù.)
+	NewLink, // Area‚É“ü‚Á‚Ä‚«‚½Link(V‚µ‚­“ü‚Á‚Ä‚«‚½l‚Ì—§ê‚Å‚ÍA]—ˆ‚É‚¢‚½lX‚ğV‚½‚É“ü‚Á‚Ä‚«‚½l‚ÆŒ©‚Ä‚¢‚éB)
 	DeleteObj
 };
 

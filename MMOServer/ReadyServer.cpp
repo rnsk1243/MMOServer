@@ -26,7 +26,7 @@ const bool CReadyServer::Listen()
 	if (bind(mListenSock, (struct sockaddr*)&mServerAddr, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
 	{
 		printf("Error - Fail bind\n");
-		// 6. 家南辆丰
+		//6.僜働僢僩廔椆
 		closesocket(mListenSock);
 		// Winsock End
 		WSACleanup();
@@ -39,7 +39,7 @@ const bool CReadyServer::Listen()
 		printf("Error - Fail listen\n");
 		//cout << "listen(listenSocket, 5) = " << listenResult << endl;
 		//cout << "Error Code4 = " << WSAGetLastError() << endl;
-		// 6. 家南辆丰
+		//6.僜働僢僩廔椆
 		closesocket(mListenSock);
 		// Winsock End
 		WSACleanup();
@@ -56,7 +56,7 @@ void CReadyServer::IncreaseDisCode()
 
 void CReadyServer::MakeThreadPool(int actThreadNum)
 {
-	// 肯丰搬苞甫 贸府窍绰 按眉(CP : Completion Port) 积己
+	//姰椆偺寢壥傪張棟偡傞僆僽僕僃僋僩(CP:Completion Port)惗惉
 	mCPObj = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, actThreadNum);
 	SYSTEM_INFO systemInfo;
 	GetSystemInfo(&systemInfo);
@@ -96,10 +96,11 @@ CLink* CReadyServer::Accept(CAreaManager* areaManager)
 	}
 	int disCode = GetDistinguishcode();
 	CLink* link = new CLink(clientSocket, StartCurArea, disCode);
+	printf("[%d]斣 client偑愙懕偟傑偟偨丅\n", link->GetMyDistinguishCode());
 	LinkPtr linkPtr(link);
 	areaManager->EnterArea(StartCurArea, linkPtr);
 	//Test* test = new Test(87);
-	mCPObj = CreateIoCompletionPort((HANDLE)(*(clientSocket)), mCPObj, (ULONG_PTR)(areaManager), 0); // Client客 CP 楷搬
+	mCPObj = CreateIoCompletionPort((HANDLE)(*(clientSocket)), mCPObj, (ULONG_PTR)(areaManager), 0); //Client偲CP愙懕
 	return link;
 }
 
@@ -107,6 +108,6 @@ int CReadyServer::GetDistinguishcode()
 {
 	int returnVal = mNextDistinguishCode;
 	IncreaseDisCode();
-	//printf("备喊锅龋 馆券 : %d\n", returnVal);
+	//printf("嬫暿斣崋偺曉娨:%d\n"丄returnVal);
 	return returnVal;
 }

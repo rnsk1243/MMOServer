@@ -19,19 +19,20 @@ void CArea::EraseClient(const int & clientPKnum)
 
 void CArea::SendDeleteCommand(const LinkPtr & linkPtr)
 {
-	// ¸ğµç »ç¶÷¿¡°Ô ³¯ Áö¿ì¶ó°í º¸³¿
-	PacketDeleteObj myDeletePacket(ProtocolInfo::DeleteObj, WrongValue); // ¸ğµç »ç¶÷µé¾Æ ³ª Áö¿ö!
+	// ‚·‚×‚Ä‚Ìl‚É„‚ÌƒNƒŠƒA‚Æ‘—M
+	//‚·‚×‚Ä‚Ìl‚É“úÁ‚µ‚Æ‘—‚Á‚½‚±‚Æ
+	PacketDeleteObj myDeletePacket(ProtocolInfo::DeleteObj, WrongValue);//‚·‚×‚Ä‚Ìl‚½‚¿A„AÁ‚µ‚Ä!
 	myDeletePacket.EraseObjDiscodeArray[0] = linkPtr.get()->GetMyDistinguishCode();
-	//printf("%d ÁÖ¹Îµé¾Æ %d Áö¿ö \n",mAreaNumber, myDeletePacket.EraseObjDiscodeArray[0]);
+	//printf("%d‚ÌZ–¯‚½‚¿‚æ%dÁ‚µ‚Ä\n"AmAreaNumberAmyDeletePacket.EraseObjDiscodeArray[0]);
 	Broadcast(PacketKindEnum::DeleteObjEnum, &myDeletePacket);
-	// ³ª¿¡°Ô ¸ğµç »ç¶÷À» Áö¿ì¶ó°í º¸³¿
-	PacketDeleteObj everyDeletePacket(ProtocolInfo::DeleteObj, WrongValue); // ³»°¡ ¸ğµç »ç¶÷ Å¬¶óÀÌ¾ğÆ® Áö¿ö!
+	//„‚É‚·‚×‚Ä‚Ìl‚ğÁ‚µ‚Æ‘—‚Á‚½‚±‚Æ
+	PacketDeleteObj everyDeletePacket(ProtocolInfo::DeleteObj, WrongValue);//„‚ª‚·‚×‚Ä‚ÌlƒNƒ‰ƒCƒAƒ“ƒgÁ‚µ‚Ä!
 
 	int index = 0;
 	LinkListIt linkIterBegin = mClientInfos.begin();
 	for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
 	{
-		CLink* oldLinkPtr = (*linkIterBegin).get();
+		CLink*oldLinkPtr = (*linkIterBegin).get();
 		if (oldLinkPtr != nullptr)
 		{
 			everyDeletePacket.EraseObjDiscodeArray[index] = oldLinkPtr->GetMyDistinguishCode();
@@ -43,7 +44,7 @@ void CArea::SendDeleteCommand(const LinkPtr & linkPtr)
 			}
 		}
 	}
-	linkPtr.get()->SendnMine(PacketKindEnum::DeleteObjEnum, &everyDeletePacket); // ³ª¸ÓÁö ¸¶Áö¸· ±îÁö º¸³¿.
+	linkPtr.get()->SendnMine(PacketKindEnum::DeleteObjEnum, &everyDeletePacket);//c‚è‚ÌÅŒã‚Ü‚Å‘—‚Á‚½‚±‚ÆB
 }
 
 
@@ -58,16 +59,16 @@ CArea::~CArea()
 
 void CArea::SearchEndRemoveErrorLink()
 {
-	//printf("³¯ ±ú¿ì´Ù´Ï Ã»¼Ò¸¦ ½ÃÀÛÇØ º¼±î...AreaNumber = %d\n", mAreaNumber);
+	//printf("„‚ğ‹N‚±‚µ‚È‚ñ‚Ä‘|œ‚ğn‚ß‚ÄŒ©‚é‚©...AreaNumber = %d\n", mAreaNumber);
 	ScopeLock<CRITICALSECTION> CS(mCS);
 	mIsRemoveErrorLink = true;
 	LinkListIt linkListIterBegin = mClientInfos.begin();
 
-	PacketDeleteObj myDeletePacket(ProtocolInfo::DeleteObj, WrongValue); // ¸ğµç »ç¶÷µé¾Æ ³ª Áö¿ö!
+	PacketDeleteObj myDeletePacket(ProtocolInfo::DeleteObj, WrongValue); //‚·‚×‚Ä‚Ìl‚½‚¿A„AÁ‚µ‚Ä!
 	int index = 0;
 	for (; linkListIterBegin != mClientInfos.end();)
 	{
-		// ¼ÒÄÏ ¿¡·¯ È¤Àº Area ÀÌµ¿ÇØ¼­ ÀÌ°÷ Area¹øÈ£¿Í ÀÏÄ¡ÇÏÁö ¾ÊÀ¸¸é »èÁ¦
+		// ƒ\ƒPƒbƒgƒGƒ‰[‚Ü‚½‚ÍAreaˆÚ“®‚µ‚Ä‚±‚±Area‚Ì”Ô†‚Æˆê’v‚µ‚È‚¯‚ê‚Îíœ
 		if ((*linkListIterBegin).get()->IsErrorClient() == true || (*linkListIterBegin).get()->GetCurArea() != mAreaNumber)
 		{
 			if ((*linkListIterBegin).get()->IsErrorClient() == true)
@@ -76,10 +77,10 @@ void CArea::SearchEndRemoveErrorLink()
 				++index;
 			}
 
-			//mClientInfos.remove((*linkListIterBegin));
-			// eraseÇÏ¸é ¹İÈ¯°ªÀ¸·Î ´ÙÀ½ ¹İº¹ÀÚ°¡ ¹İÈ¯µÊ. ±×·¯¹Ç·Î for¹® µ¹¶§¸¶´Ù ++iteratorÇÒ ÇÊ¿ä¾øÀ½
-			// ´Ù¸¸ erase¸¦ ÇÏÁö ¾ÊÀ» °æ¿ì(else¹®) ´ÙÀ½ ¹İº¹ÀÚ·Î ³Ñ¾î°¡µµ·Ï ÇØÁØ´Ù.
-			//printf("SearchEndRemoveErrorLink count = %d\n", (*linkListIterBegin).use_count());
+			//mClientInfos.remove(*linkListIterBegin));
+			//erase‚·‚é‚ÆA•Ô‚è’l‚ÅŸ‚Ì”½•œÒ‚ª•ÔŠÒ‚³‚ê‚½‚±‚ÆBBB‚¾‚©‚çAfor•¶‰ñ‚é‚½‚Ñ‚ÉA++iterator‚Í–³—p
+			//‚½‚¾Aerase‚ğ‚µ‚È‚¢ê‡(else•¶)Ÿ‚ÌƒŒƒvƒŠƒP[ƒ^[‚É“n‚é‚æ‚¤‚É‚µ‚Ä‚¢‚éB
+			//printf("SearchEndRemoveErrorLink count=%d\n"A(*linkListIterBegin)Buse_count());
 			linkListIterBegin = mClientInfos.erase(linkListIterBegin);
 			--mAmountPeople;
 			//ErrorHandlerPtr->DecreaseErrorLink(mAreaNumber);
@@ -95,7 +96,7 @@ void CArea::SearchEndRemoveErrorLink()
 		}
 	}
 	
-	// ¿¡·¯ ¾ø´Â ¸ğµç »ç¶÷¿¡°Ô ³¯ Áö¿ì¶ó°í º¸³¿
+	//ƒGƒ‰[‚Ì‚È‚¢‚·‚×‚Ä‚Ìl‚É“úÁ‚µ‚Æ‘—‚Á‚½‚±‚Æ
 	mIsRemoveErrorLink = false;
 	Broadcast(PacketKindEnum::DeleteObjEnum, &myDeletePacket);
 
@@ -105,17 +106,17 @@ void CArea::SendNewClientNotice(const LinkPtr & newClientPtr)
 {
 	int newClientDisCode = newClientPtr.get()->GetMyDistinguishCode();
 	PacketTransform newLinkTr(ProtocolInfo::NewLink, newClientDisCode, newClientPtr.get()->GetMyTransform());
-	//printf("ÀüÀÔ ½Å°í Position.y = %f\n", newClientPtr.get()->GetMyTransform().Position.y);
-	// ¿ø·¡ ÀÖ´ø »ç¶÷¿¡°Ô "ÀüÀÔ ½Å°í ÇÏ±â"
+	//printf("“]“ü\Position.y=%f\n"AnewClientPtr.get()->GetMyTransform()BPosition.y);
+	//Œ³X‚ ‚Á‚½l‚É"“]“ü\‚·‚é"
 	Broadcast(PacketKindEnum::Transform, &newLinkTr);
-	// ¿ø·¡ ÀÖ´ø »ç¶÷µéÀÌ ÇöÀç ÀÚ½ÅÀÇ À§Ä¡¸¦ »õ·Î µé¾î¿Â »ç¶÷¿¡°Ô ¾Ë·ÁÁÖ±â
+	//Œ³X‚ ‚Á‚½l‚½‚¿‚ªŒ»İA©•ª‚ÌˆÊ’u‚ğV‚½‚É“ü‚Á‚Ä‚«‚½l‚É‹³‚¦
 	LinkListIt linkIterBegin = mClientInfos.begin();
 	for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)
 	{
 		CLink* oldLinkPtr = (*linkIterBegin).get();
 		if (oldLinkPtr != nullptr)
 		{
-			//printf("»ı¼º À§Ä¡ : %d", oldLinkPtr->GetMyTransform().Position.x);
+			//printf("¶¬‚ÌˆÊ’u:%d"AoldLinkPtr->GetMyTransform()BPosition.x);
 			PacketTransform oldLinkTr(ProtocolInfo::NewLink, oldLinkPtr->GetMyDistinguishCode(), oldLinkPtr->GetMyTransform());
 			newClientPtr.get()->SendnMine(PacketKindEnum::Transform, &oldLinkTr);
 		}
@@ -125,7 +126,7 @@ void CArea::SendNewClientNotice(const LinkPtr & newClientPtr)
 
 bool CArea::PushClient(const LinkPtr & shared_client)
 {
-	if (ErrorHandlerPtr->IsErrorLinkRemoveStart(mAreaNumber)) // ¿¡·¯³­ Link¸¦ Á¦°ÅÇÒ °³¼ö°¡ ±âÁØÀ» ÃÊ°úÇß³ª?
+	if (ErrorHandlerPtr->IsErrorLinkRemoveStart(mAreaNumber))//ƒGƒ‰[‚µ‚½Link‚ğœ‹‚·‚é‰üC‚ªŠî€‚ğ’´‰ß‚µ‚½‚Ì‚©?
 	{
 		SearchEndRemoveErrorLink();
 	}
@@ -154,11 +155,11 @@ const LinkPtr CArea::GetLinkPtr(int disCode)
 
 void CArea::Broadcast(const PacketKindEnum PacketKind, LPVOID packet)
 {
-	if (ErrorHandlerPtr->IsErrorLinkRemoveStart(mAreaNumber)) // ¿¡·¯³­ Link¸¦ Á¦°ÅÇÒ °³¼ö°¡ ±âÁØÀ» ÃÊ°úÇß³ª?
+	if (ErrorHandlerPtr->IsErrorLinkRemoveStart(mAreaNumber)) //ƒGƒ‰[‚µ‚½Link‚ğœ‹‚·‚é‰üC‚ªŠî€‚ğ’´‰ß‚µ‚½‚Ì‚©?
 	{
 		SearchEndRemoveErrorLink();
 	}
-	if (!mIsRemoveErrorLink) // IsErrorLinkRemoveStart ÇÔ¼ö°¡ È£Ãâ ÁßÀÌ ¾Æ´Ï¸é.
+	if (!mIsRemoveErrorLink) //IsErrorLinkRemoveStartŠÖ”‚ªŒÄ‚Ño‚µ’†‚Å‚È‚¯‚ê‚ÎB
 	{
 		LinkListIt linkIterBegin = mClientInfos.begin();
 		for (; linkIterBegin != mClientInfos.end(); ++linkIterBegin)

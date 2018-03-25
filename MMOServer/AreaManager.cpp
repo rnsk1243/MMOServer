@@ -5,7 +5,7 @@
 
 //void PatrolErrorLinkWorkThread(LPVOID areasPtr, LPVOID hREv, LPVOID hBEv)
 //{
-//	printf("ErrorLinkÁ¦°Å ½º·¹µå ½ºÅ¸Æ®");
+//	printf("ErrorLink‚Ìœ‹Ž‚ÌƒXƒŒƒbƒhƒXƒ^[ƒg");
 //	AreaVector* areas = (AreaVector*)areasPtr;
 //	HANDLE hRemoveEvent = *((HANDLE*)hREv);
 //	HANDLE hBroadcastEvent = *((HANDLE*)hBEv);
@@ -13,11 +13,11 @@
 //	{
 //		if (ErrorHandlerPtr->IsErrorLinkRemoveStart())
 //		{
-//			printf("°¡ºñÁö ÀÛµ¿!\n");
+//			 printf("EƒK[ƒx[ƒWEì“®!\n");
 //			//printf("//1111//\n");
 //			ResetEvent(hRemoveEvent);
 //			WaitForSingleObject(hBroadcastEvent, INFINITE);
-//			//printf("//1111Åë°ú//\n");
+//			//printf("//1111ƒpƒX//\n");
 //
 //			AreaVectorIt areaiterBegin = areas->begin();
 //			for (; areaiterBegin != areas->end(); ++areaiterBegin)
@@ -38,8 +38,8 @@ CAreaManager::CAreaManager(int areaAmount)
 		AreaPtr newArea(new CArea("test", i));
 		mAreas.push_back(newArea);
 	}
-	//hRemoveEvent = CreateEvent(NULL, TRUE, TRUE, NULL);	// ¸Å´º¾ó ¸®¼Â, ½ÅÈ£ »óÅÂ
-	//hBroadcastEvent = CreateEvent(NULL, FALSE, FALSE, NULL); // ¿ÀÅä ¸®¼Â, ºñ½ÅÈ£ »óÅÂ
+	//hRemoveEvent = CreateEvent(NULL, TRUE, TRUE, NULL);	//ƒ}ƒjƒ…ƒAƒ‹ƒŠƒZƒbƒgAM†ó‘Ô
+	//hBroadcastEvent = CreateEvent(NULL, FALSE, FALSE, NULL); //ƒI[ƒgƒŠƒZƒbƒgAƒrƒVƒ“ƒzó‘Ô
 
 	//std::thread errorLinkRemoveWork(PatrolErrorLinkWorkThread, &mAreas, &hRemoveEvent, & hBroadcastEvent);
 	//errorLinkRemoveWork.detach();
@@ -63,9 +63,10 @@ bool CAreaManager::MoveArea(int areaNumber, const LinkPtr & linkPtr)
 	if (linkPtr == nullptr)
 		return false;
 	int oldAreaNumber = linkPtr.get()->GetCurArea();
-	mAreas[oldAreaNumber].get()->SendDeleteCommand(linkPtr); // Å¬¶óÀÌ¾ðÆ®µé¿¡°Ô Áö¿ì¶ó ¸í·É
-	ErrorHandlerPtr->PushDeletePlayerDisCode(oldAreaNumber, linkPtr.get()->GetMyDistinguishCode()); // ¼­¹ö ÄÁÅ×ÀÌ³Ê¿¡ µéÀº°Å Áö¿ì±â µî·Ï
+	mAreas[oldAreaNumber].get()->SendDeleteCommand(linkPtr); //ƒNƒ‰ƒCƒAƒ“ƒg‚Éíœ–½—ß
+	ErrorHandlerPtr->PushDeletePlayerDisCode(oldAreaNumber, linkPtr.get()->GetMyDistinguishCode()); //ƒT[ƒoƒRƒ“ƒeƒi‚É•·‚¢‚½‚Ì‚ðÁ‚·‚±‚Æ“o˜^
 	bool result = EnterArea(areaNumber, linkPtr);
+	printf("[%d]”Ô client‚ª [%d]”Ô Area‚ÅˆÚ“®‚µ‚Ü‚µ‚½B\n", linkPtr.get()->GetMyDistinguishCode(), areaNumber);
 	return result;
 }
 
@@ -85,7 +86,7 @@ void CAreaManager::Broadcast(LinkPtr link, const PacketKindEnum PacketKind, LPVO
 //	printf("//2222//\n");
 	//WaitForSingleObject(hRemoveEvent, INFINITE);
 	//ResetEvent(hBroadcastEvent);
-//	printf("//2222Åë°ú//\n");
+//	/ printf("//2222’Ê‰ß//\n");
 	int myArea = link.get()->GetCurArea();
 	mAreas[myArea].get()->Broadcast(PacketKind, packet);
 

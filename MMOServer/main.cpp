@@ -8,6 +8,7 @@ typedef std::list<LinkPtr> LinkList;
 
 void main()
 {
+	printf("IOCPを利用したゲームサーバ\n");
 	CReadyServer server;
 	CAreaManager areaManager(AreaAmount);
 	while (true)

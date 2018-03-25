@@ -16,7 +16,7 @@ class CArea
 	const int mAreaNumber;
 	bool mIsRemoveErrorLink;
 	void EraseClient(const int& clientPKnum);
-	int mErrorLinkAmount; // ¿¡·¯³­ link °³¼ö.
+	int mErrorLinkAmount; //ƒGƒ‰[‚µ‚½link”B
 	void SearchEndRemoveErrorLink();
 	void SendNewClientNotice(const LinkPtr & newClientPtr);
 	//void Removeclient(LinkListIt)

@@ -22,18 +22,18 @@ CUtil* CUtil::GetInstance()
 
 void CUtil::GetCurtime(std::vector<std::string>& targetStrVec)
 {
-	const time_t curTime(time(NULL));	// localtimeÇÔ¼ö¿¡ ³ÖÀ» ÀÎÀÚ ¼±¾ğ // 1970³â1¿ù1ÀÏºÎÅÍ ¸îÃÊ°¡ Áö³µ´ÂÁö °è»ê
+	const time_t curTime(time(NULL));	 //localtimeŠÖ”‚É“ü‚ê‚éˆöqéŒ¾//1970”N1Œ1“ú‚©‚ç”•b‚ª‰ß‚¬‚½‚©‚Ç‚¤‚©ŒvZ
 	tm timeStruct;
-	localtime_s(&timeStruct, &curTime); // Áö¿ª ½Ã°£ ±âÁØÀ¸·Î º¯È¯
+	localtime_s(&timeStruct, &curTime); //’nˆæŠÔŠî€‚É•ÏŠ·
 	std::vector<std::string> localStrVector;
-	localStrVector.reserve(timeKind); // °ø°£ ÇÒ´ç
-	localStrVector.push_back(IntToString(timeStruct.tm_year - 100) + "³â");
-	localStrVector.push_back(IntToString(timeStruct.tm_mon + 1) + "¿ù");
-	localStrVector.push_back(IntToString(timeStruct.tm_mday) + "ÀÏ");
-	localStrVector.push_back(IntToString(timeStruct.tm_hour) + "½Ã");
-	localStrVector.push_back(IntToString(timeStruct.tm_min) + "ºĞ");
-	localStrVector.push_back(IntToString(timeStruct.tm_sec) + "ÃÊ");
-	targetStrVec.insert(targetStrVec.end(), localStrVector.begin(), localStrVector.end()); // ¹üÀ§ ´ëÀÔ
+	localStrVector.reserve(timeKind); //‹óŠÔŠ„‚è“–‚Ä
+	localStrVector.push_back(IntToString(timeStruct.tm_year - 100) + "”N");
+	localStrVector.push_back(IntToString(timeStruct.tm_mon + 1) + "Œ");
+	localStrVector.push_back(IntToString(timeStruct.tm_mday) + "“ú");
+	localStrVector.push_back(IntToString(timeStruct.tm_hour) + "");
+	localStrVector.push_back(IntToString(timeStruct.tm_min) + "•ª");
+	localStrVector.push_back(IntToString(timeStruct.tm_sec) + "•b");
+	targetStrVec.insert(targetStrVec.end(), localStrVector.begin(), localStrVector.end()); //”ÍˆÍ‘åŠw“ü
 }
 
 const std::string CUtil::IntToString(const int & targetInt)

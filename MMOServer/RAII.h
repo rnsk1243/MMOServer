@@ -10,21 +10,21 @@ private:
 public:
 	MUTEX()
 	{
-		//	cout << "mutex »ý¼ºÀÚ È£Ãâ" << endl;
+		//	cout << "mutex¶¬ŽÒŒÄ‚Ño" << endl;
 	}
 	~MUTEX()
 	{
-		//	cout << "mutex ¼Ò¸êÀÚ È£Ãâ" << endl;
+		//	cout << "mutexƒ\ƒ~ƒ‡ƒ‹ƒWƒƒŒÄ‚Ño‚µ" << endl;
 	}
 	void lock()
 	{
 		mMutex.lock();
-		//	cout << "mutex lock ¿Ï·á" << endl;
+		//	cout << "mutex lockŠ®—¹" << endl;
 	}
 	void unlock()
 	{
 		mMutex.unlock();
-		//	cout << "mutex nulock ¿Ï·á" << endl;
+		//	cout << "mutex nulockŠ®—¹" << endl;
 	}
 
 };
@@ -41,17 +41,17 @@ public:
 	~CRITICALSECTION()
 	{
 		DeleteCriticalSection(&mCS);
-			std::cout << "critical °´Ã¼ ÇØÁ¦" << std::endl;
+			std::cout << "criticalƒIƒuƒWƒFƒNƒg‚Ì‰ðœ" << std::endl;
 	}
 	void lock()
 	{
 		EnterCriticalSection(&mCS);
-		//std::cout << "critical lock ¿Ï·á" << std::endl;
+		//std::cout << "critical lockŠ®—¹" << std::endl;
 	}
 	void unlock()
 	{
 		LeaveCriticalSection(&mCS);
-		//std::cout << "critical unlock ¿Ï·á" << std::endl;
+		//std::cout << "critical unlockŠ®—¹" << std::endl;
 	}
 };
 

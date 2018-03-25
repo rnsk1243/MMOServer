@@ -5,8 +5,8 @@
 
 class CCommandMap
 {
-	typedef void(CCommandMap::*pf)(const LinkPtr&, CAreaManager*, PacketMessage*); // CCommandMapÀÇ ¸â¹ö ÇÔ¼öÀÌ°í ¹İÈ¯°ªÀÌ void, ÀÎ¼öµµ voidÀÎ ÇÔ¼ö Æ÷ÀÎÅÍ ¿øÇü
-	typedef std::map<std::string, pf> MAP_FUNC; // map¿¡ string°ú ¸â¹öÇÔ¼öÆ÷ÀÎÅÍ¸¦ ´ã´Â map typedef
+	typedef void(CCommandMap::*pf)(const LinkPtr&, CAreaManager*, PacketMessage*); //CCommandMap‚Ìƒƒ“ƒo[ŠÖ”‚Å‚ ‚èA•Ô‚è’l‚ªvoidA”ƒû‚àvoid‚ÌŠÖ”ƒ|ƒCƒ“ƒ^Œ´Œ^
+	typedef std::map<std::string, pf> MAP_FUNC; //map‚Éstring‚Æƒƒ“ƒo[ŠÖ”ƒ|ƒCƒ“ƒ^‚ğ·‚émap typedef
 
 	void SendMyDistinguishCode(const LinkPtr & targetClient, CAreaManager* areaManager, PacketMessage* packetMessage);
 	void MoveArea(const LinkPtr & targetClient, CAreaManager* areaManager, PacketMessage* packetMessage);

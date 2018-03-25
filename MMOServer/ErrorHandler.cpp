@@ -18,7 +18,7 @@ void CErrorHandler::Write(const char * textFileName, const std::vector<std::stri
 	ofstream outFile(textFileName, ios::app);
 	if (!outFile)
 	{
-		cout << "ÆÄÀÏÀÌ ¾ø½À´Ï´Ù." << endl;
+		cout << "ƒtƒ@ƒCƒ‹‚ª‚ ‚è‚Ü‚¹‚ñB" << endl;
 		return;
 	}
 	vector<string>::const_iterator iterBeginWrite = strVec.begin();
@@ -52,15 +52,15 @@ void CErrorHandler::GetErrorLevel(ErrorLevel errorLV, std::vector<std::string>& 
 	vector<string> localStrVector;
 	localStrVector.reserve(1);
 	localStrVector.push_back(strLevel);
-	result.insert(result.end(), localStrVector.begin(), localStrVector.end()); // ¹üÀ§ ´ëÀÔ
+	result.insert(result.end(), localStrVector.begin(), localStrVector.end()); //”ÍˆÍ‘åŠw“üŽŽ
 }
 
 void CErrorHandler::GetErrorCode(ErrorCode code, std::vector<std::string>& result)
 {
 	vector<string> localStrVector;
-	localStrVector.reserve(1); // °ø°£ ÇÒ´ç
+	localStrVector.reserve(1);//‹óŠÔŠ„‚è“–‚Ä
 	localStrVector.push_back(UtilPtr->IntToString((int)code));
-	result.insert(result.end(), localStrVector.begin(), localStrVector.end()); // ¹üÀ§ ´ëÀÔ
+	result.insert(result.end(), localStrVector.begin(), localStrVector.end()); //”ÍˆÍ‘åŠw“üŽŽ
 }
 
 void CErrorHandler::GetErrorClientInfo(CLink* client, std::vector<std::string>& result)
@@ -76,9 +76,9 @@ void CErrorHandler::GetErrorClientInfo(CLink* client, std::vector<std::string>& 
 		localStrVector.reserve(2);
 		localStrVector.push_back(UtilPtr->IntToString(client->GetMyDistinguishCode()));
 		//localStrVector.push_back(string(client->GetMyName()));
-		localStrVector.push_back("ÀÓ½ÃÀÌ¸§");
+		localStrVector.push_back("—ÕŽž‚Ì–¼‘O");
 	}
-	result.insert(result.end(), localStrVector.begin(), localStrVector.end()); // ¹üÀ§ ´ëÀÔ
+	result.insert(result.end(), localStrVector.begin(), localStrVector.end()); //”ÍˆÍ‘åŠw“üŽŽ
 }
 
 void CErrorHandler::MakeErrorFrame(ErrorLevel errorLV, ErrorCode code, std::vector<std::string>& result)
